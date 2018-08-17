@@ -192,7 +192,7 @@ public class StackmatTimer implements StackmatTimerReaderListener, Timer {
         RESET,
         READY,
         RUNNING,
-    };
+    }
 
     private StackmatTimerReader stackmatTimerReader;
     private TimerManager timerManager;

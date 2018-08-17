@@ -1,6 +1,6 @@
 package com.puzzletimer.gui;
 
-import static com.puzzletimer.Internationalization._;
+import static com.puzzletimer.Internationalization.identifier;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -56,7 +56,7 @@ public class SessionSummaryFrame extends JFrame {
             public void categoriesUpdated(Category[] categories, Category currentCategory) {
                 setTitle(
                     String.format(
-                        _("session_summary.session_sumary_category"),
+                        identifier("session_summary.session_sumary_category"),
                         currentCategory.getDescription()));
             }
         });
@@ -111,7 +111,7 @@ public class SessionSummaryFrame extends JFrame {
                 "[pref!][][pref!]16[pref!]"));
 
         // labelSessionSummary
-        add(new JLabel(_("session_summary.summary")), "wrap");
+        add(new JLabel(identifier("session_summary.summary")), "wrap");
 
         // textAreaContents
         this.textAreaSummary = new JTextArea();
@@ -119,11 +119,11 @@ public class SessionSummaryFrame extends JFrame {
         add(scrollPane, "grow, wrap");
 
         // button copy to clipboard
-        this.buttonCopyToClipboard = new JButton(_("session_summary.copy_to_clipboard"));
+        this.buttonCopyToClipboard = new JButton(identifier("session_summary.copy_to_clipboard"));
         add(this.buttonCopyToClipboard, "width 150, right, wrap");
 
         // buttonOk
-        this.buttonOk = new JButton(_("session_summary.ok"));
+        this.buttonOk = new JButton(identifier("session_summary.ok"));
         add(this.buttonOk, "tag ok");
     }
 
@@ -151,12 +151,12 @@ public class SessionSummaryFrame extends JFrame {
 
             // statistics
             String[] labels = {
-                _("session_summary.mean"),
-                _("session_summary.average"),
-                _("session_summary.best_time"),
-                _("session_summary.median"),
-                _("session_summary.worst_time"),
-                _("session_summary.standard_deviation"),
+                identifier("session_summary.mean"),
+                identifier("session_summary.average"),
+                identifier("session_summary.best_time"),
+                identifier("session_summary.median"),
+                identifier("session_summary.worst_time"),
+                identifier("session_summary.standard_deviation"),
             };
 
             StatisticalMeasure[] statistics = {
@@ -206,8 +206,8 @@ public class SessionSummaryFrame extends JFrame {
 
         // best average of X
         String[] labels = {
-            _("session_summary.best_average_of_5"),
-            _("session_summary.best_average_of_12"),
+            identifier("session_summary.best_average_of_5"),
+            identifier("session_summary.best_average_of_12"),
         };
 
         StatisticalMeasure[] statistics = {

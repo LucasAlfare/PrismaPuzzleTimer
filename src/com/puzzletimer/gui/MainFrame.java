@@ -1,8 +1,8 @@
 package com.puzzletimer.gui;
 
 import au.com.emc.cubing.stackmat.StackmatManager;
-import au.com.emc.cubing.stackmat.StackmatReporterConsole;
-import static com.puzzletimer.Internationalization._;
+
+import static com.puzzletimer.Internationalization.identifier;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -410,7 +410,7 @@ public class MainFrame extends JFrame {
                     "1[pref!]1[pref!]1[pref!]1[pref!]1[pref!]1[pref!]6[pref!]1[pref!]6[pref!]1[pref!]6[pref!]1[pref!]1"));
 
             // labelMean
-            JLabel labelMeanDescription = new JLabel(_("statistics.mean"));
+            JLabel labelMeanDescription = new JLabel(identifier("statistics.mean"));
             labelMeanDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelMeanDescription);
 
@@ -418,7 +418,7 @@ public class MainFrame extends JFrame {
             add(this.labelMean, "wrap");
 
             // labelAverage
-            JLabel labelAverageDescription = new JLabel(_("statistics.average"));
+            JLabel labelAverageDescription = new JLabel(identifier("statistics.average"));
             labelAverageDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelAverageDescription);
 
@@ -426,7 +426,7 @@ public class MainFrame extends JFrame {
             add(this.labelAverage, "wrap");
 
             // labelBestTime
-            JLabel labelBestTimeDescription = new JLabel(_("statistics.best_time"));
+            JLabel labelBestTimeDescription = new JLabel(identifier("statistics.best_time"));
             labelBestTimeDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelBestTimeDescription);
 
@@ -434,7 +434,7 @@ public class MainFrame extends JFrame {
             add(this.labelBestTime, "wrap");
 
             // labelMedian
-            JLabel labelMedianDescription = new JLabel(_("statistics.median"));
+            JLabel labelMedianDescription = new JLabel(identifier("statistics.median"));
             labelMedianDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelMedianDescription);
 
@@ -442,7 +442,7 @@ public class MainFrame extends JFrame {
             add(this.labelMedian, "wrap");
 
             // labelWorstTime
-            JLabel labelWorstTimeDescription = new JLabel(_("statistics.worst_time"));
+            JLabel labelWorstTimeDescription = new JLabel(identifier("statistics.worst_time"));
             labelWorstTimeDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelWorstTimeDescription);
 
@@ -450,7 +450,7 @@ public class MainFrame extends JFrame {
             add(this.labelWorstTime, "wrap");
 
             // labelStandardDeviation
-            JLabel labelStandardDeviationDescription = new JLabel(_("statistics.standard_deviation"));
+            JLabel labelStandardDeviationDescription = new JLabel(identifier("statistics.standard_deviation"));
             labelStandardDeviationDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelStandardDeviationDescription);
 
@@ -458,7 +458,7 @@ public class MainFrame extends JFrame {
             add(this.labelStandardDeviation, "wrap");
 
             // labelMeanOf3
-            JLabel labelMeanOf3Description = new JLabel(_("statistics.mean_of_3"));
+            JLabel labelMeanOf3Description = new JLabel(identifier("statistics.mean_of_3"));
             labelMeanOf3Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelMeanOf3Description);
 
@@ -466,7 +466,7 @@ public class MainFrame extends JFrame {
             add(this.labelMeanOf3, "wrap");
 
             // labelBestMeanOf3
-            JLabel labelBestMeanOf3Description = new JLabel(_("statistics.best_mean_of_3"));
+            JLabel labelBestMeanOf3Description = new JLabel(identifier("statistics.best_mean_of_3"));
             labelBestMeanOf3Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelBestMeanOf3Description);
 
@@ -474,7 +474,7 @@ public class MainFrame extends JFrame {
             add(this.labelBestMeanOf3, "wrap");
 
             // labelAverageOf5
-            JLabel labelAverageOf5Description = new JLabel(_("statistics.average_of_5"));
+            JLabel labelAverageOf5Description = new JLabel(identifier("statistics.average_of_5"));
             labelAverageOf5Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelAverageOf5Description);
 
@@ -482,7 +482,7 @@ public class MainFrame extends JFrame {
             add(this.labelAverageOf5, "wrap");
 
             // labelBestAverageOf5
-            JLabel labelBestAverageOf5Description = new JLabel(_("statistics.best_average_of_5"));
+            JLabel labelBestAverageOf5Description = new JLabel(identifier("statistics.best_average_of_5"));
             labelBestAverageOf5Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelBestAverageOf5Description);
 
@@ -490,7 +490,7 @@ public class MainFrame extends JFrame {
             add(this.labelBestAverageOf5, "wrap");
 
             // labelAverageOf12
-            JLabel labelAverageOf12Description = new JLabel(_("statistics.average_of_12"));
+            JLabel labelAverageOf12Description = new JLabel(identifier("statistics.average_of_12"));
             labelAverageOf12Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelAverageOf12Description);
 
@@ -498,7 +498,7 @@ public class MainFrame extends JFrame {
             add(this.labelAverageOf12, "wrap");
 
             // labelBestAverageOf12
-            JLabel labelBestAverageOf12Description = new JLabel(_("statistics.best_average_of_12"));
+            JLabel labelBestAverageOf12Description = new JLabel(identifier("statistics.best_average_of_12"));
             labelBestAverageOf12Description.setFont(new Font("Tahoma", Font.BOLD, 11));
             add(labelBestAverageOf12Description);
 
@@ -683,7 +683,7 @@ public class MainFrame extends JFrame {
             public void categoriesUpdated(Category[] categories, Category currentCategory) {
                 setTitle(
                     String.format(
-                        _("main.prisma_puzzle_time_category"),
+                        identifier("main.prisma_puzzle_time_category"),
                         currentCategory.getDescription()));
             }
         });
@@ -711,7 +711,7 @@ public class MainFrame extends JFrame {
 
                 SolutionEditingDialog solutionEditingDialog =
                     new SolutionEditingDialog(MainFrame.this, true, solution, listener);
-                solutionEditingDialog.setTitle(_("main.add_solution_title"));
+                solutionEditingDialog.setTitle(identifier("main.add_solution_title"));
                 solutionEditingDialog.setLocationRelativeTo(null);
                 solutionEditingDialog.setVisible(true);
             }
@@ -766,7 +766,7 @@ public class MainFrame extends JFrame {
                 MainFrame.this.menuCategory.removeAll();
 
                 // category manager
-                JMenuItem menuItemCategoryManager = new JMenuItem(_("main.category_manager"));
+                JMenuItem menuItemCategoryManager = new JMenuItem(identifier("main.category_manager"));
                 menuItemCategoryManager.setMnemonic(KeyEvent.VK_M);
                 menuItemCategoryManager.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutKey | InputEvent.ALT_MASK));
                 menuItemCategoryManager.addActionListener(new ActionListener() {
@@ -1003,7 +1003,7 @@ public class MainFrame extends JFrame {
 
                     MainFrame.this.messageManager.enqueueMessage(
                         MessageType.ERROR,
-                        _("main.stackmat_timer_error_message"));
+                        identifier("main.stackmat_timer_error_message"));
                 }
             } else {
                 // select the default timer
@@ -1013,7 +1013,7 @@ public class MainFrame extends JFrame {
 
                 MainFrame.this.messageManager.enqueueMessage(
                     MessageType.ERROR,
-                    _("main.stackmat_timer_error_message"));
+                    identifier("main.stackmat_timer_error_message"));
             }
         } else if (timerTriggerId.equals("STACKMAT-GEN3-TIMER")) {
             
@@ -1037,7 +1037,7 @@ public class MainFrame extends JFrame {
 
                 MainFrame.this.messageManager.enqueueMessage(
                     MessageType.ERROR,
-                    _("main.stackmat_timer_error_message"));                
+                    identifier("main.stackmat_timer_error_message"));
             }           
         }
     }
@@ -1050,12 +1050,12 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
 
         // menuFile
-        this.menuFile = new JMenu(_("main.file"));
+        this.menuFile = new JMenu(identifier("main.file"));
         this.menuFile.setMnemonic(KeyEvent.VK_F);
         menuBar.add(this.menuFile);
 
         // menuItemAddSolution
-        this.menuItemAddSolution = new JMenuItem(_("main.add_solution"));
+        this.menuItemAddSolution = new JMenuItem(identifier("main.add_solution"));
         this.menuItemAddSolution.setMnemonic(KeyEvent.VK_A);
         this.menuItemAddSolution.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, menuShortcutKey));
         this.menuFile.add(this.menuItemAddSolution);
@@ -1063,108 +1063,108 @@ public class MainFrame extends JFrame {
         this.menuFile.addSeparator();
 
         // menuItemExit
-        this.menuItemExit = new JMenuItem(_("main.exit"));
+        this.menuItemExit = new JMenuItem(identifier("main.exit"));
         this.menuItemExit.setMnemonic(KeyEvent.VK_X);
         this.menuFile.add(this.menuItemExit);
 
         // menuView
-        JMenu menuView = new JMenu(_("main.view"));
+        JMenu menuView = new JMenu(identifier("main.view"));
         menuView.setMnemonic(KeyEvent.VK_V);
         menuBar.add(menuView);
 
         // menuItemTips
-        this.menuItemTips = new JMenuItem(_("main.tips"));
+        this.menuItemTips = new JMenuItem(identifier("main.tips"));
         this.menuItemTips.setMnemonic(KeyEvent.VK_T);
         this.menuItemTips.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, menuShortcutKey | KeyEvent.ALT_MASK));
         menuView.add(this.menuItemTips);
 
         // menuItemScrambleQueue
-        this.menuItemScrambleQueue = new JMenuItem(_("main.scramble_queue"));
+        this.menuItemScrambleQueue = new JMenuItem(identifier("main.scramble_queue"));
         this.menuItemScrambleQueue.setMnemonic(KeyEvent.VK_Q);
         this.menuItemScrambleQueue.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, menuShortcutKey | KeyEvent.ALT_MASK));
         menuView.add(this.menuItemScrambleQueue);
 
         // menuItemHistory
-        this.menuItemHistory = new JMenuItem(_("main.history"));
+        this.menuItemHistory = new JMenuItem(identifier("main.history"));
         this.menuItemHistory.setMnemonic(KeyEvent.VK_H);
         this.menuItemHistory.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, menuShortcutKey | KeyEvent.ALT_MASK));
         menuView.add(this.menuItemHistory);
 
         // menuItemSessionSummary
-        this.menuItemSessionSummary = new JMenuItem(_("main.session_summary"));
+        this.menuItemSessionSummary = new JMenuItem(identifier("main.session_summary"));
         this.menuItemSessionSummary.setMnemonic(KeyEvent.VK_S);
         this.menuItemSessionSummary.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, menuShortcutKey | KeyEvent.ALT_MASK));
         menuView.add(this.menuItemSessionSummary);
 
         // menuCategory
-        this.menuCategory = new JMenu(_("main.category"));
+        this.menuCategory = new JMenu(identifier("main.category"));
         this.menuCategory.setMnemonic(KeyEvent.VK_C);
         menuBar.add(this.menuCategory);
 
         // menuOptions
-        JMenu menuOptions = new JMenu(_("main.options"));
+        JMenu menuOptions = new JMenu(identifier("main.options"));
         menuOptions.setMnemonic(KeyEvent.VK_O);
         menuBar.add(menuOptions);
 
         // menuColorScheme
-        this.menuItemColorScheme = new JMenuItem(_("main.color_scheme"));
+        this.menuItemColorScheme = new JMenuItem(identifier("main.color_scheme"));
         this.menuItemColorScheme.setMnemonic(KeyEvent.VK_C);
         this.menuItemColorScheme.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, menuShortcutKey | KeyEvent.ALT_MASK));
         menuOptions.add(this.menuItemColorScheme);
 
         // menuItemInspectionTime
-        this.menuItemInspectionTime = new JCheckBoxMenuItem(_("main.inspection_time"));
+        this.menuItemInspectionTime = new JCheckBoxMenuItem(identifier("main.inspection_time"));
         this.menuItemInspectionTime.setMnemonic(KeyEvent.VK_I);
         this.menuItemInspectionTime.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, menuShortcutKey | KeyEvent.ALT_MASK));
         menuOptions.add(this.menuItemInspectionTime);
 
         // menuTimerTrigger
-        JMenu menuTimerTrigger = new JMenu(_("main.timer_trigger"));
+        JMenu menuTimerTrigger = new JMenu(identifier("main.timer_trigger"));
         menuTimerTrigger.setMnemonic(KeyEvent.VK_T);
         menuOptions.add(menuTimerTrigger);
         ButtonGroup timerTriggerGroup = new ButtonGroup();
 
         // menuItemCtrlKeys
-        this.menuItemCtrlKeys = new JRadioButtonMenuItem(_("main.ctrl_keys"));
+        this.menuItemCtrlKeys = new JRadioButtonMenuItem(identifier("main.ctrl_keys"));
         this.menuItemCtrlKeys.setMnemonic(KeyEvent.VK_C);
         this.menuItemCtrlKeys.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutKey));
         menuTimerTrigger.add(this.menuItemCtrlKeys);
         timerTriggerGroup.add(this.menuItemCtrlKeys);
 
         // menuItemSpaceKey
-        this.menuItemSpaceKey = new JRadioButtonMenuItem(_("main.space_key"));
+        this.menuItemSpaceKey = new JRadioButtonMenuItem(identifier("main.space_key"));
         this.menuItemSpaceKey.setMnemonic(KeyEvent.VK_S);
         this.menuItemSpaceKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, menuShortcutKey));
         menuTimerTrigger.add(this.menuItemSpaceKey);
         timerTriggerGroup.add(this.menuItemSpaceKey);
 
         // menuItemStackmatTimer
-        this.menuItemStackmatTimer = new JRadioButtonMenuItem(_("main.stackmat_timer"));
+        this.menuItemStackmatTimer = new JRadioButtonMenuItem(identifier("main.stackmat_timer"));
         this.menuItemStackmatTimer.setMnemonic(KeyEvent.VK_T);
         this.menuItemStackmatTimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, menuShortcutKey));
         menuTimerTrigger.add(this.menuItemStackmatTimer);
         timerTriggerGroup.add(this.menuItemStackmatTimer);
 
         // menuItemStackmatGen3Timer
-        this.menuItemStackmatGen3Timer = new JRadioButtonMenuItem(_("main.stackmat_gen3_timer"));
+        this.menuItemStackmatGen3Timer = new JRadioButtonMenuItem(identifier("main.stackmat_gen3_timer"));
         this.menuItemStackmatGen3Timer.setMnemonic(KeyEvent.VK_3);
         this.menuItemStackmatGen3Timer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, menuShortcutKey));
         menuTimerTrigger.add(this.menuItemStackmatGen3Timer);
         timerTriggerGroup.add(this.menuItemStackmatGen3Timer);
         
         // menuStackmatTimerInputDevice
-        this.stackmatTimerInputDevice = new JMenu(_("main.stackmat_timer_input_device"));
+        this.stackmatTimerInputDevice = new JMenu(identifier("main.stackmat_timer_input_device"));
         menuTimerTrigger.setMnemonic(KeyEvent.VK_S);
         menuOptions.add(this.stackmatTimerInputDevice);
         this.stackmatTimerInputDeviceGroup = new ButtonGroup();
 
         //menuHelp
-        JMenu menuHelp = new JMenu(_("main.help"));
+        JMenu menuHelp = new JMenu(identifier("main.help"));
         menuHelp.setMnemonic(KeyEvent.VK_H);
         menuBar.add(menuHelp);
 
         // menuItemAbout
-        this.menuItemAbout = new JMenuItem(_("main.about"));
+        this.menuItemAbout = new JMenuItem(identifier("main.about"));
         this.menuItemAbout.setMnemonic(KeyEvent.VK_A);
         menuHelp.add(this.menuItemAbout);
 
@@ -1195,13 +1195,13 @@ public class MainFrame extends JFrame {
 
         // times scroll pane
         this.timesScrollPane = new TimesScrollPane(this.solutionManager, this.sessionManager);
-        this.timesScrollPane.setBorder(BorderFactory.createTitledBorder(_("main.times")));
+        this.timesScrollPane.setBorder(BorderFactory.createTitledBorder(identifier("main.times")));
         this.timesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panelMain.add(this.timesScrollPane, "w 30%, growy, gapright 0, split 3");
 
         // statistics panel
         this.statisticsPanel = new StatisticsPanel(this.sessionManager);
-        this.statisticsPanel.setBorder(BorderFactory.createTitledBorder(_("main.session_statistics")));
+        this.statisticsPanel.setBorder(BorderFactory.createTitledBorder(identifier("main.session_statistics")));
         panelMain.add(this.statisticsPanel, "w 40%, growy, gapright 0");
 
         // scramble viewer panel
@@ -1210,7 +1210,7 @@ public class MainFrame extends JFrame {
             this.colorManager,
             this.scramblerProvider,
             this.scrambleManager);
-        this.scrambleViewerPanel.setBorder(BorderFactory.createTitledBorder(_("main.scramble")));
+        this.scrambleViewerPanel.setBorder(BorderFactory.createTitledBorder(identifier("main.scramble")));
         panelMain.add(this.scrambleViewerPanel, "w 30%, growy");
 
         this.scramblePanel.setScrambleViewerPanel(this.scrambleViewerPanel);
