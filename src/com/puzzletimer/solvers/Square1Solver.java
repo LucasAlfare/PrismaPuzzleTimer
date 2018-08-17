@@ -509,11 +509,8 @@ public class Square1Solver {
             ArrayList<Integer> solution1 = new ArrayList<Integer>();
             ArrayList<Integer> solution2 = new ArrayList<Integer>();
             if (search(state, isEvenPermutation(state.getPiecesPermutation()), depth, solution1, solution2)) {
-                ArrayList<Integer> sequence = new ArrayList<Integer>();
 
-                for (int moveIndex : solution1) {
-                    sequence.add(moveIndex);
-                }
+                ArrayList<Integer> sequence = new ArrayList<Integer>(solution1);
 
                 int[][] phase2MoveMapping = {
                     {  2 },

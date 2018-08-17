@@ -1,5 +1,7 @@
 package lucas.main;//package teste_com_cstimer;
 
+import java.util.ArrayList;
+
 public class Search {
 
     int[] move = new int[100];
@@ -21,6 +23,26 @@ public class Search {
     static {
         Shape.init();
         Square.init();
+    }
+
+    //para ser usado no Prisma
+    public String[] solutionAsArray(FullCube c){
+        String s = solution(c);
+        ArrayList<String> elements = new ArrayList<>();
+        StringBuilder lastMove = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) + "").matches("[\\D\\d]") && s.charAt(i) != '/'){
+                lastMove.append(s.charAt(i));
+            } else {
+                elements.add(lastMove.toString());
+                elements.add("/");
+                lastMove = new StringBuilder();
+            }
+        }
+
+        System.out.println("scramble generated using Chuang Sheng code!");
+
+        return elements.toArray(new String[0]);
     }
 
     public String solution(FullCube c) {
@@ -238,9 +260,9 @@ public class Search {
                 bottom = (val > 6) ? (val - 12) : val;
             } else {
                 if (top == 0 && bottom == 0) {
-                    s.append(" / ");
+                    s.append("/");
                 } else {
-                    s.append('(').append(top).append(",").append(bottom).append(") / ");
+                    s.append('(').append(top).append(",").append(bottom).append(")/");
                 }
                 top = 0;
                 bottom = 0;

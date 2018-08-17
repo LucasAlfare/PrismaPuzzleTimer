@@ -1,14 +1,13 @@
 package lucas.main;//package teste_com_cstimer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 50; i++) {
-            System.out.println(scramble());
-        }
+        System.out.println(Arrays.toString(new Search().solutionAsArray(FullCube.randomCube())));
     }
 
     public static String scramble(){

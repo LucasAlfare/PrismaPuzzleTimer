@@ -5,6 +5,8 @@ import java.util.Random;
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
 import com.puzzletimer.solvers.Square1Solver;
+import lucas.main.FullCube;
+import lucas.main.Search;
 
 public class Square1RandomScrambler implements Scrambler {
     private ScramblerInfo scramblerInfo;
@@ -24,10 +26,15 @@ public class Square1RandomScrambler implements Scrambler {
 
     @Override
     public Scramble getNextScramble() {
+        /*
         return new Scramble(
             getScramblerInfo().getScramblerId(),
             this.solver.generate(
                 this.solver.getRandomState(this.random)));
+         */
+        return new Scramble(
+                getScramblerInfo().getScramblerId(),
+                new Search().solutionAsArray(FullCube.randomCube(this.random)));
     }
 
     @Override
