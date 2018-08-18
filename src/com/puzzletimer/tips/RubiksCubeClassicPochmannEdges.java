@@ -1,12 +1,12 @@
 package com.puzzletimer.tips;
 
-import static com.puzzletimer.Internationalization.identifier;
+import com.puzzletimer.models.Scramble;
+import com.puzzletimer.solvers.RubiksCubeSolver.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.puzzletimer.models.Scramble;
-import com.puzzletimer.solvers.RubiksCubeSolver.State;
+import static com.puzzletimer.Internationalization.identifier;
 
 public class RubiksCubeClassicPochmannEdges implements Tip {
     @Override
@@ -38,24 +38,24 @@ public class RubiksCubeClassicPochmannEdges implements Tip {
         ArrayList<String> stickerSequence = new ArrayList<String>();
 
         String[][] stickerNames = {
-            { "BL", "LB" },
-            { "BR", "RB" },
-            { "FR", "RF" },
-            { "FL", "LF" },
-            { "UB", "BU" },
-            { "UR", "RU" },
-            { "UF", "FU" },
-            { "UL", "LU" },
-            { "DB", "BD" },
-            { "DR", "RD" },
-            { "DF", "FD" },
-            { "DL", "LD" },
+                {"BL", "LB"},
+                {"BR", "RB"},
+                {"FR", "RF"},
+                {"FL", "LF"},
+                {"UB", "BU"},
+                {"UR", "RU"},
+                {"UF", "FU"},
+                {"UL", "LU"},
+                {"DB", "BD"},
+                {"DR", "RD"},
+                {"DF", "FD"},
+                {"DL", "LD"},
         };
 
         int cycleFirstPiece = 5;
         int currentPermutation = 5;
         int currentOrientation = 0;
-        for (;;) {
+        for (; ; ) {
             int nextPermutation = state.edgesPermutation[currentPermutation];
             int nextOrientation = (2 - state.edgesOrientation[currentPermutation] + currentOrientation) % 2;
 

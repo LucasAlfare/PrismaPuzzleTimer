@@ -18,8 +18,8 @@ public class EmptyScrambler implements Scrambler {
     @Override
     public Scramble getNextScramble() {
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            new String[] { });
+                getScramblerInfo().getScramblerId(),
+                new String[]{});
     }
 
     @Override

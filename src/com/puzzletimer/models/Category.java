@@ -1,9 +1,9 @@
 package com.puzzletimer.models;
 
-import static com.puzzletimer.Internationalization.identifier;
-
 import java.util.HashMap;
 import java.util.UUID;
+
+import static com.puzzletimer.Internationalization.identifier;
 
 public class Category {
     private final UUID categoryId;
@@ -30,11 +30,11 @@ public class Category {
 
     public Category setScramblerId(String scramblerId) {
         return new Category(
-            this.categoryId,
-            scramblerId,
-            this.description,
-            this.isUserDefined,
-            this.tipIds);
+                this.categoryId,
+                scramblerId,
+                this.description,
+                this.isUserDefined,
+                this.tipIds);
     }
 
     public String getDescription() {
@@ -67,11 +67,11 @@ public class Category {
 
     public Category setDescription(String description) {
         return new Category(
-            this.categoryId,
-            this.scramblerId,
-            description,
-            this.isUserDefined,
-            this.tipIds);
+                this.categoryId,
+                this.scramblerId,
+                description,
+                this.isUserDefined,
+                this.tipIds);
     }
 
     public boolean isUserDefined() {
@@ -84,10 +84,10 @@ public class Category {
 
     public Category setTipIds(String[] tipIds) {
         return new Category(
-            this.categoryId,
-            this.scramblerId,
-            this.description,
-            this.isUserDefined,
-            tipIds);
+                this.categoryId,
+                this.scramblerId,
+                this.description,
+                this.isUserDefined,
+                tipIds);
     }
 }

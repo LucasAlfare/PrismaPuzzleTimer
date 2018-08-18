@@ -1,13 +1,13 @@
 package com.puzzletimer.tips;
 
-import static com.puzzletimer.Internationalization.identifier;
+import com.puzzletimer.models.Scramble;
+import com.puzzletimer.solvers.RubiksCubeSolver.State;
+import com.puzzletimer.solvers.RubiksCubeXCrossSolver;
+import com.puzzletimer.util.StringUtils;
 
 import java.util.ArrayList;
 
-import com.puzzletimer.models.Scramble;
-import com.puzzletimer.solvers.RubiksCubeXCrossSolver;
-import com.puzzletimer.solvers.RubiksCubeSolver.State;
-import com.puzzletimer.util.StringUtils;
+import static com.puzzletimer.Internationalization.identifier;
 
 public class RubiksCubeOptimalXCross implements Tip {
     private static State x;
@@ -16,22 +16,22 @@ public class RubiksCubeOptimalXCross implements Tip {
 
     static {
         x = new State(
-            new byte[] { 3, 2, 6, 7, 0, 1, 5, 4 },
-            new byte[] { 2, 1, 2, 1, 1, 2, 1, 2 },
-            new byte[] { 7, 5, 9, 11, 6, 2, 10, 3, 4, 1, 8, 0 },
-            new byte[] { 0, 0, 0,  0, 1, 0,  1, 0, 1, 0, 1, 0 });
+                new byte[]{3, 2, 6, 7, 0, 1, 5, 4},
+                new byte[]{2, 1, 2, 1, 1, 2, 1, 2},
+                new byte[]{7, 5, 9, 11, 6, 2, 10, 3, 4, 1, 8, 0},
+                new byte[]{0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0});
 
         y = new State(
-            new byte[] { 3, 0, 1, 2, 7, 4, 5, 6 },
-            new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 },
-            new byte[] { 3, 0, 1, 2, 7, 4, 5, 6, 11, 8, 9, 10 },
-            new byte[] { 1, 1, 1, 1, 0, 0, 0, 0,  0, 0, 0,  0 });
+                new byte[]{3, 0, 1, 2, 7, 4, 5, 6},
+                new byte[]{0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[]{3, 0, 1, 2, 7, 4, 5, 6, 11, 8, 9, 10},
+                new byte[]{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0});
 
         z = new State(
-            new byte[] { 4, 0, 3, 7, 5, 1, 2, 6 },
-            new byte[] { 1, 2, 1, 2, 2, 1, 2, 1 },
-            new byte[] { 8, 4, 6, 10, 0, 7, 3, 11, 1, 5, 2, 9 },
-            new byte[] { 1, 1, 1,  1, 1, 1, 1, 1,  1, 1, 1, 1 });
+                new byte[]{4, 0, 3, 7, 5, 1, 2, 6},
+                new byte[]{1, 2, 1, 2, 2, 1, 2, 1},
+                new byte[]{8, 4, 6, 10, 0, 7, 3, 11, 1, 5, 2, 9},
+                new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RubiksCubeOptimalXCross implements Tip {
 
         // x-cross on U
         State stateU =
-            x.multiply(x).multiply(state).multiply(x).multiply(x);
+                x.multiply(x).multiply(state).multiply(x).multiply(x);
         tip.append(identifier("tip.RUBIKS-CUBE-OPTIMAL-X-CROSS.optimal_x_cross_on_u") + ":\n");
         tip.append(getOptimalSolutions(stateU, "x2 "));
         tip.append("\n");
@@ -70,28 +70,28 @@ public class RubiksCubeOptimalXCross implements Tip {
 
         // x-cross on L
         State stateL =
-            z.multiply(state).multiply(z).multiply(z).multiply(z);
+                z.multiply(state).multiply(z).multiply(z).multiply(z);
         tip.append(identifier("tip.RUBIKS-CUBE-OPTIMAL-X-CROSS.optimal_x_cross_on_l") + ":\n");
         tip.append(getOptimalSolutions(stateL, "z' "));
         tip.append("\n");
 
         // x-cross on R
         State stateR =
-            z.multiply(z).multiply(z).multiply(state).multiply(z);
+                z.multiply(z).multiply(z).multiply(state).multiply(z);
         tip.append(identifier("tip.RUBIKS-CUBE-OPTIMAL-X-CROSS.optimal_x_cross_on_r") + ":\n");
         tip.append(getOptimalSolutions(stateR, "z "));
         tip.append("\n");
 
         // x-cross on F
         State stateF =
-            x.multiply(state).multiply(x).multiply(x).multiply(x);
+                x.multiply(state).multiply(x).multiply(x).multiply(x);
         tip.append(identifier("tip.RUBIKS-CUBE-OPTIMAL-X-CROSS.optimal_x_cross_on_f") + ":\n");
         tip.append(getOptimalSolutions(stateF, "x' "));
         tip.append("\n");
 
         // x-cross on B
         State stateB =
-            x.multiply(x).multiply(x).multiply(state).multiply(x);
+                x.multiply(x).multiply(x).multiply(state).multiply(x);
         tip.append(identifier("tip.RUBIKS-CUBE-OPTIMAL-X-CROSS.optimal_x_cross_on_b") + ":\n");
         tip.append(getOptimalSolutions(stateB, "x "));
         tip.append("\n");
@@ -112,7 +112,7 @@ public class RubiksCubeOptimalXCross implements Tip {
 
         // y
         State stateY =
-            y.multiply(y).multiply(y).multiply(state).multiply(y);
+                y.multiply(y).multiply(y).multiply(state).multiply(y);
         for (String[] solution : RubiksCubeXCrossSolver.solve(stateY)) {
             prefixes.add(prefix + "y ");
             solutions.add(solution);
@@ -120,7 +120,7 @@ public class RubiksCubeOptimalXCross implements Tip {
 
         // y2
         State stateY2 =
-            y.multiply(y).multiply(state).multiply(y).multiply(y);
+                y.multiply(y).multiply(state).multiply(y).multiply(y);
         for (String[] solution : RubiksCubeXCrossSolver.solve(stateY2)) {
             prefixes.add(prefix + "y2 ");
             solutions.add(solution);
@@ -128,7 +128,7 @@ public class RubiksCubeOptimalXCross implements Tip {
 
         // y'
         State stateY3 =
-            y.multiply(state).multiply(y).multiply(y).multiply(y);
+                y.multiply(state).multiply(y).multiply(y).multiply(y);
         for (String[] solution : RubiksCubeXCrossSolver.solve(stateY3)) {
             prefixes.add(prefix + "y' ");
             solutions.add(solution);
@@ -145,9 +145,9 @@ public class RubiksCubeOptimalXCross implements Tip {
         for (int i = 0; i < solutions.size(); i++) {
             if (solutions.get(i).length == minLength) {
                 output.append(
-                    String.format("  %s%s\n",
-                        prefixes.get(i),
-                        StringUtils.join(" ", solutions.get(i))));
+                        String.format("  %s%s\n",
+                                prefixes.get(i),
+                                StringUtils.join(" ", solutions.get(i))));
             }
         }
 

@@ -1,14 +1,10 @@
 package com.puzzletimer.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.puzzletimer.models.Category;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
-
-import com.puzzletimer.models.Category;
 
 public class CategoryDAO {
     private Connection connection;
@@ -25,8 +21,8 @@ public class CategoryDAO {
             Statement categoryStatement = this.connection.createStatement();
 
             ResultSet categoryResultSet = categoryStatement.executeQuery(
-                "SELECT CATEGORY_ID, SCRAMBLER_ID, DESCRIPTION, USER_DEFINED FROM CATEGORY " +
-                "ORDER BY \"ORDER\"");
+                    "SELECT CATEGORY_ID, SCRAMBLER_ID, DESCRIPTION, USER_DEFINED FROM CATEGORY " +
+                            "ORDER BY \"ORDER\"");
 
             while (categoryResultSet.next()) {
                 UUID categoryId = UUID.fromString(categoryResultSet.getString(1));
@@ -36,9 +32,9 @@ public class CategoryDAO {
 
                 // tips
                 PreparedStatement tipsStatement = this.connection.prepareStatement(
-                    "SELECT TIP_ID FROM CATEGORY_TIPS " +
-                    "WHERE CATEGORY_ID = ? " +
-                    "ORDER BY \"ORDER\"");
+                        "SELECT TIP_ID FROM CATEGORY_TIPS " +
+                                "WHERE CATEGORY_ID = ? " +
+                                "ORDER BY \"ORDER\"");
 
                 tipsStatement.setString(1, categoryId.toString());
 
@@ -53,12 +49,12 @@ public class CategoryDAO {
                 tipIds.toArray(tipIdsArray);
 
                 categories.add(
-                    new Category(
-                        categoryId,
-                        scramblerId,
-                        description,
-                        isUserDefined,
-                        tipIdsArray));
+                        new Category(
+                                categoryId,
+                                scramblerId,
+                                description,
+                                isUserDefined,
+                                tipIdsArray));
             }
 
             categoryStatement.close();
@@ -78,7 +74,7 @@ public class CategoryDAO {
 
             // category
             PreparedStatement categoryStatement = this.connection.prepareStatement(
-                "INSERT INTO CATEGORY VALUES (?, ?, ?, ?, ?)");
+                    "INSERT INTO CATEGORY VALUES (?, ?, ?, ?, ?)");
 
             categoryStatement.setInt(1, 0);
             categoryStatement.setString(2, category.getCategoryId().toString());
@@ -92,7 +88,7 @@ public class CategoryDAO {
 
             // tips
             PreparedStatement tipsStatement = this.connection.prepareStatement(
-                "INSERT INTO CATEGORY_TIPS VALUES (?, ?, ?)");
+                    "INSERT INTO CATEGORY_TIPS VALUES (?, ?, ?)");
 
             for (int i = 0; i < category.getTipIds().length; i++) {
                 tipsStatement.setInt(1, i);
@@ -130,8 +126,8 @@ public class CategoryDAO {
 
             // category
             PreparedStatement categoryStatement = this.connection.prepareStatement(
-                "UPDATE CATEGORY SET SCRAMBLER_ID = ?, DESCRIPTION = ?, USER_DEFINED = ? " +
-                "WHERE CATEGORY_ID = ?");
+                    "UPDATE CATEGORY SET SCRAMBLER_ID = ?, DESCRIPTION = ?, USER_DEFINED = ? " +
+                            "WHERE CATEGORY_ID = ?");
 
             categoryStatement.setString(1, category.getScramblerId());
             categoryStatement.setString(2, category.getDescription());
@@ -144,8 +140,8 @@ public class CategoryDAO {
 
             // delete old tips
             PreparedStatement deleteTipsStatement = this.connection.prepareStatement(
-                "DELETE FROM CATEGORY_TIPS " +
-                "WHERE CATEGORY_ID = ?");
+                    "DELETE FROM CATEGORY_TIPS " +
+                            "WHERE CATEGORY_ID = ?");
 
             deleteTipsStatement.setString(1, category.getCategoryId().toString());
 
@@ -155,7 +151,7 @@ public class CategoryDAO {
 
             // tips
             PreparedStatement tipsStatement = this.connection.prepareStatement(
-                "INSERT INTO CATEGORY_TIPS VALUES (?, ?, ?)");
+                    "INSERT INTO CATEGORY_TIPS VALUES (?, ?, ?)");
 
             for (int i = 0; i < category.getTipIds().length; i++) {
                 tipsStatement.setInt(1, i);
@@ -190,8 +186,8 @@ public class CategoryDAO {
     public void delete(Category category) {
         try {
             PreparedStatement statement = this.connection.prepareStatement(
-                "DELETE FROM CATEGORY " +
-                "WHERE CATEGORY_ID = ?");
+                    "DELETE FROM CATEGORY " +
+                            "WHERE CATEGORY_ID = ?");
 
             statement.setString(1, category.getCategoryId().toString());
 

@@ -11,11 +11,11 @@ public class RubiksCubeSingleStickerCycleScrambler implements Scrambler {
     public RubiksCubeSingleStickerCycleScrambler(ScramblerInfo scramblerInfo) {
         this.scramblerInfo = scramblerInfo;
         this.rubiksCubeRandomScrambler = new RubiksCubeRandomScrambler(
-            new ScramblerInfo("RUBIKS-CUBE-RANDOM", "RUBIKS-CUBE", "Random scrambler"),
-            new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
-            new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
-            new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-            new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 });
+                new ScramblerInfo("RUBIKS-CUBE-RANDOM", "RUBIKS-CUBE", "Random scrambler"),
+                new byte[]{-1, -1, -1, -1, -1, -1, -1, -1},
+                new byte[]{-1, -1, -1, -1, -1, -1, -1, -1},
+                new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+                new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});
     }
 
     @Override
@@ -36,13 +36,13 @@ public class RubiksCubeSingleStickerCycleScrambler implements Scrambler {
             boolean[] solvedCorners = new boolean[8];
             for (int i = 0; i < solvedCorners.length; i++) {
                 solvedCorners[i] =
-                    state.cornersPermutation[i] == i &&
-                    state.cornersOrientation[i] == 0;
+                        state.cornersPermutation[i] == i &&
+                                state.cornersOrientation[i] == 0;
             }
             solvedCorners[0] = true;
 
             int currentCorner = 0;
-            for (;;) {
+            for (; ; ) {
                 int nextCorner = state.cornersPermutation[currentCorner];
 
                 // end of cycle
@@ -66,13 +66,13 @@ public class RubiksCubeSingleStickerCycleScrambler implements Scrambler {
             boolean[] solvedEdges = new boolean[12];
             for (int i = 0; i < solvedEdges.length; i++) {
                 solvedEdges[i] =
-                    state.edgesPermutation[i] == i &&
-                    state.edgesOrientation[i] == 0;
+                        state.edgesPermutation[i] == i &&
+                                state.edgesOrientation[i] == 0;
             }
             solvedEdges[0] = true;
 
             int currentEdge = 0;
-            for (;;) {
+            for (; ; ) {
                 int nextEdge = state.edgesPermutation[currentEdge];
 
                 // end of cycle
@@ -94,8 +94,8 @@ public class RubiksCubeSingleStickerCycleScrambler implements Scrambler {
         }
 
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            RubiksCubeSolver.generate(state));
+                getScramblerInfo().getScramblerId(),
+                RubiksCubeSolver.generate(state));
     }
 
     @Override

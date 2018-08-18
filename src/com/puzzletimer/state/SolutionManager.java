@@ -1,26 +1,12 @@
 package com.puzzletimer.state;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
-
 import com.puzzletimer.models.Solution;
 
-public class SolutionManager {
-    public static class Listener {
-        public void solutionAdded(Solution solution) { }
-        public void solutionsAdded(Solution[] solutions) { }
-        public void solutionRemoved(Solution solution) { }
-        public void solutionUpdated(Solution solution) { }
-        public void solutionsUpdated(Solution[] solutions) { }
-    }
+import java.util.*;
 
+public class SolutionManager {
     private ArrayList<Listener> listeners;
     private HashMap<UUID, Solution> solutions;
-
     public SolutionManager() {
         this.listeners = new ArrayList<Listener>();
         this.solutions = new HashMap<UUID, Solution>();
@@ -28,9 +14,9 @@ public class SolutionManager {
 
     public Solution[] getSolutions() {
         ArrayList<Solution> solutions =
-            new ArrayList<Solution>(this.solutions.values());
+                new ArrayList<Solution>(this.solutions.values());
 
-        Collections.sort(solutions,new Comparator<Solution>() {
+        Collections.sort(solutions, new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
                 Date start1 = solution1.getTiming().getStart();
@@ -110,5 +96,22 @@ public class SolutionManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void solutionAdded(Solution solution) {
+        }
+
+        public void solutionsAdded(Solution[] solutions) {
+        }
+
+        public void solutionRemoved(Solution solution) {
+        }
+
+        public void solutionUpdated(Solution solution) {
+        }
+
+        public void solutionsUpdated(Solution[] solutions) {
+        }
     }
 }

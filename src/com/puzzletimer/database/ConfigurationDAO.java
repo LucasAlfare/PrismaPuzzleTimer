@@ -1,13 +1,9 @@
 package com.puzzletimer.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
 import com.puzzletimer.models.ConfigurationEntry;
+
+import java.sql.*;
+import java.util.ArrayList;
 
 public class ConfigurationDAO {
     private Connection connection;
@@ -23,7 +19,7 @@ public class ConfigurationDAO {
             Statement statement = this.connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(
-                "SELECT KEY, VALUE FROM CONFIGURATION");
+                    "SELECT KEY, VALUE FROM CONFIGURATION");
 
             while (resultSet.next()) {
                 String key = resultSet.getString(1);
@@ -44,7 +40,7 @@ public class ConfigurationDAO {
     public void update(ConfigurationEntry entry) {
         try {
             PreparedStatement statement = this.connection.prepareStatement(
-                "UPDATE CONFIGURATION SET VALUE = ? WHERE KEY = ?");
+                    "UPDATE CONFIGURATION SET VALUE = ? WHERE KEY = ?");
 
             statement.setString(1, entry.getValue());
             statement.setString(2, entry.getKey());

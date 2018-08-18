@@ -1,12 +1,12 @@
 package com.puzzletimer.scramblers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
 import com.puzzletimer.solvers.RubiksCubeSolver;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class RubiksCubeRandomScrambler implements Scrambler {
     private ScramblerInfo scramblerInfo;
@@ -159,17 +159,17 @@ public class RubiksCubeRandomScrambler implements Scrambler {
         } while (permutationSign(cornersPermutation) != permutationSign(edgesPermutation));
 
         return new RubiksCubeSolver.State(
-            cornersPermutation,
-            cornersOrientation,
-            edgesPermutation,
-            edgesOrientation);
+                cornersPermutation,
+                cornersOrientation,
+                edgesPermutation,
+                edgesOrientation);
     }
 
     @Override
     public Scramble getNextScramble() {
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            RubiksCubeSolver.generate(getRandomState()));
+                getScramblerInfo().getScramblerId(),
+                RubiksCubeSolver.generate(getRandomState()));
     }
 
     @Override

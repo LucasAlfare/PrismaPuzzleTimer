@@ -6,5 +6,6 @@ import com.puzzletimer.models.PuzzleInfo;
 
 public interface Puzzle {
     PuzzleInfo getPuzzleInfo();
+
     Mesh getScrambledPuzzleMesh(ColorScheme colorScheme, String[] sequence);
 }

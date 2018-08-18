@@ -6,20 +6,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MessageManager {
-    public static class Listener {
-        public void messagesCleared() { }
-        public void messageReceived(MessageType messageType, String message) { }
-    }
-
-    public enum MessageType {
-        INFORMATION,
-        ERROR,
-    }
-
     private ArrayList<String> messageQueue;
     private ArrayList<MessageType> messageTypeQueue;
     private ArrayList<Listener> listeners;
-
     public MessageManager() {
         this.messageQueue = new ArrayList<String>();
         this.messageTypeQueue = new ArrayList<MessageType>();
@@ -47,9 +36,9 @@ public class MessageManager {
                     synchronized (MessageManager.this) {
                         if (MessageManager.this.messageTypeQueue.size() > 0) {
                             MessageType messageType =
-                                MessageManager.this.messageTypeQueue.remove(0);
+                                    MessageManager.this.messageTypeQueue.remove(0);
                             String message =
-                                MessageManager.this.messageQueue.remove(0);
+                                    MessageManager.this.messageQueue.remove(0);
 
                             for (Listener listener : MessageManager.this.listeners) {
                                 listener.messageReceived(messageType, message);
@@ -77,5 +66,18 @@ public class MessageManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public enum MessageType {
+        INFORMATION,
+        ERROR,
+    }
+
+    public static class Listener {
+        public void messagesCleared() {
+        }
+
+        public void messageReceived(MessageType messageType, String message) {
+        }
     }
 }

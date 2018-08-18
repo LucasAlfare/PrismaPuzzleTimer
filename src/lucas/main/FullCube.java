@@ -6,28 +6,14 @@ import java.util.Random;
 
 public class FullCube implements Comparable<FullCube> {
 
+    static Random r = new Random();
     int ul = 0x011233;
     int ur = 0x455677;
     int dl = 0x998bba;
     int dr = 0xddcffe;
     int ml = 0;
-
-    @Override
-    public int compareTo(FullCube f) {
-        if (ul != f.ul) {
-            return ul - f.ul;
-        }
-        if (ur != f.ur) {
-            return ur - f.ur;
-        }
-        if (dl != f.dl) {
-            return dl - f.dl;
-        }
-        if (dr != f.dr) {
-            return dr - f.dr;
-        }
-        return ml - f.ml;
-    }
+    int[] arr = new int[16];
+    byte[] prm = new byte[8];
 
     FullCube(String s) {
         //TODO
@@ -37,54 +23,6 @@ public class FullCube implements Comparable<FullCube> {
 
     }
 
-    public FullCube custom(String topo, String base){
-        String cs_s = topo.replaceAll("11", "1").concat(base.replaceAll("11", "1")).replaceAll(" ", "");
-        byte[] bins = new byte[cs_s.length()];
-        for (int i = 0; i < bins.length; i++) {
-            bins[i] = Byte.parseByte(cs_s.charAt(i) + "");
-        }
-
-        ArrayList<Byte> p = new ArrayList<>();
-        FullCube custom = new FullCube();
-        byte[] meios = {0, 2, 4, 6, 8, 10, 12, 14};
-        byte[] cantos = {1, 3, 5, 7, 9, 11, 13, 15};
-
-        byte meio = 0;
-        byte canto = 0;
-        int i = 0;
-        for (/*pass*/; p.size() < 12; i++) {
-            if (bins[i] % 2 == 0){
-                p.add(meios[meio]);
-                meio++;
-            } else {
-                p.add(cantos[canto]);
-                p.add(cantos[canto]);
-                canto++;
-            }
-        }
-
-        for (/*pass*/; i < bins.length; i++) {
-            if (bins[i] % 2 == 0){
-                p.add(meios[meio]);
-                meio++;
-            } else {
-                p.add(cantos[canto]);
-                p.add(cantos[canto]);
-                canto++;
-            }
-        }
-
-        Collections.swap(p, 12, 14);
-        Collections.swap(p, 15, 17);
-        Collections.swap(p, 18, 20);
-        Collections.swap(p, 21, 23);
-
-        System.out.println(p);
-
-        return custom;
-    }
-
-    static Random r = new Random();
     public static FullCube randomCube() {
         return randomCube(r);
     }
@@ -156,8 +94,72 @@ public class FullCube implements Comparable<FullCube> {
         }
     }
 
-    public static FullCube customCube(){
+    public static FullCube customCube() {
         return null;
+    }
+
+    @Override
+    public int compareTo(FullCube f) {
+        if (ul != f.ul) {
+            return ul - f.ul;
+        }
+        if (ur != f.ur) {
+            return ur - f.ur;
+        }
+        if (dl != f.dl) {
+            return dl - f.dl;
+        }
+        if (dr != f.dr) {
+            return dr - f.dr;
+        }
+        return ml - f.ml;
+    }
+
+    public FullCube custom(String topo, String base) {
+        String cs_s = topo.replaceAll("11", "1").concat(base.replaceAll("11", "1")).replaceAll(" ", "");
+        byte[] bins = new byte[cs_s.length()];
+        for (int i = 0; i < bins.length; i++) {
+            bins[i] = Byte.parseByte(cs_s.charAt(i) + "");
+        }
+
+        ArrayList<Byte> p = new ArrayList<>();
+        FullCube custom = new FullCube();
+        byte[] meios = {0, 2, 4, 6, 8, 10, 12, 14};
+        byte[] cantos = {1, 3, 5, 7, 9, 11, 13, 15};
+
+        byte meio = 0;
+        byte canto = 0;
+        int i = 0;
+        for (/*pass*/; p.size() < 12; i++) {
+            if (bins[i] % 2 == 0) {
+                p.add(meios[meio]);
+                meio++;
+            } else {
+                p.add(cantos[canto]);
+                p.add(cantos[canto]);
+                canto++;
+            }
+        }
+
+        for (/*pass*/; i < bins.length; i++) {
+            if (bins[i] % 2 == 0) {
+                p.add(meios[meio]);
+                meio++;
+            } else {
+                p.add(cantos[canto]);
+                p.add(cantos[canto]);
+                canto++;
+            }
+        }
+
+        Collections.swap(p, 12, 14);
+        Collections.swap(p, 15, 17);
+        Collections.swap(p, 18, 20);
+        Collections.swap(p, 21, 23);
+
+        System.out.println(p);
+
+        return custom;
     }
 
     void copy(FullCube c) {
@@ -171,32 +173,31 @@ public class FullCube implements Comparable<FullCube> {
     /**
      * Applies a move to a cube face (true for top and false to bottom).
      * The {@code move} param is taked as we have in standard scrambles.
-     *
+     * <p>
      * Example:
      * (6, -5) -> move(true, 6) | move(false, -5)
      *
      * @param face The face you want to move.
      * @param move the value of the move you want to do.
      */
-    public void move(boolean face, int move){
+    public void move(boolean face, int move) {
         this.doMove(face ? (move > 0 ? move : 12 - (move * -1)) : (move > 0 ? move : 12 - (move * -1)) * -1);
     }
 
     /**
      * Applies a twist (slash "/") to current cube.
      */
-    public void twist(){
-        if (this.isTwistable()){
+    public void twist() {
+        if (this.isTwistable()) {
             this.doMove(0);
         }
     }
 
     /**
-     * @param move
-     * 0 = twist
-     * [1, 11] = top move
-     * [-1, -11] = bottom move
-     * for example, 6 == (6, 0), 9 == (-3, 0), -4 == (0, 4)
+     * @param move 0 = twist
+     *             [1, 11] = top move
+     *             [-1, -11] = bottom move
+     *             for example, 6 == (6, 0), 9 == (-3, 0), -4 == (0, 4)
      */
     void doMove(int move) {
         move <<= 2;
@@ -259,8 +260,6 @@ public class FullCube implements Comparable<FullCube> {
         }
     }
 
-    int[] arr = new int[16];
-
     int getParity() {
         int cnt = 0;
         arr[0] = pieceAt(0);
@@ -271,7 +270,7 @@ public class FullCube implements Comparable<FullCube> {
         }
         int p = 0;
         for (int a = 0; a < 16; a++) {
-            for (int b = a + 1 ; b < 16 ; b++) {
+            for (int b = a + 1; b < 16; b++) {
                 if (arr[a] > arr[b]) {
                     p ^= 1;
                 }
@@ -314,8 +313,6 @@ public class FullCube implements Comparable<FullCube> {
         System.out.println(Integer.toHexString(dr));
     }
 
-    byte[] prm = new byte[8];
-
     void getSquare(Square sq) {
         for (int a = 0; a < 8; a++) {
             prm[a] = (byte) (pieceAt(a * 3 + 1) >> 1);
@@ -328,14 +325,14 @@ public class FullCube implements Comparable<FullCube> {
         sq.topEdgeFirst = pieceAt(0) == pieceAt(1);
         a = sq.topEdgeFirst ? 2 : 0;
         for (b = 0; b < 4; a += 3, b++) {
-            prm[b] = (byte)(pieceAt(a) >> 1);
+            prm[b] = (byte) (pieceAt(a) >> 1);
         }
 
         sq.botEdgeFirst = pieceAt(12) == pieceAt(13);
         a = sq.botEdgeFirst ? 14 : 12;
 
-        for ( ; b < 8; a += 3, b++) {
-            prm[b] = (byte)(pieceAt(a) >> 1);
+        for (; b < 8; a += 3, b++) {
+            prm[b] = (byte) (pieceAt(a) >> 1);
         }
         sq.edgeperm = Square.get8Perm(prm);
         sq.ml = ml;
@@ -345,14 +342,14 @@ public class FullCube implements Comparable<FullCube> {
      * Returns a "binary" representation to this cube.
      * Each edge is a 0 and each corner is a 1.
      * This is usefull to shape analysis.
-     *
+     * <p>
      * The pieces from top are represented from UB edge to UBL corner (clock-wise).
      * The pieces from bottom are represented from DF edge to DFL corner (clock-wise).
      *
      * @param face the face you want to see binary representation.
      * @return a binary representation of a square-1 face.
      */
-    public String binString(boolean face){
+    public String binString(boolean face) {
         String r = "";
 
         r += pieceAt(face ? 0 : 17) % 2 == 0 ? 0 : 1;

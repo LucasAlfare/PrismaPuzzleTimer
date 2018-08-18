@@ -1,10 +1,6 @@
 package com.puzzletimer.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.LayoutManager;
+import java.awt.*;
 
 public class WrapLayout implements LayoutManager {
     private final int xGap;

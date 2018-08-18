@@ -1,19 +1,14 @@
 package com.puzzletimer.state;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.puzzletimer.models.ColorScheme;
 import com.puzzletimer.models.ColorScheme.FaceColor;
 
-public class ColorManager {
-    public static class Listener {
-        public void colorSchemeUpdated(ColorScheme colorScheme) { }
-    }
+import java.util.ArrayList;
+import java.util.HashMap;
 
+public class ColorManager {
     private ArrayList<Listener> listeners;
     private HashMap<String, ColorScheme> colorSchemeMap;
-
     public ColorManager(ColorScheme[] colorSchemes) {
         this.listeners = new ArrayList<Listener>();
 
@@ -44,5 +39,10 @@ public class ColorManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void colorSchemeUpdated(ColorScheme colorScheme) {
+        }
     }
 }

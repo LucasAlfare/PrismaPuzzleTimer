@@ -21,9 +21,9 @@ public class Timing {
 
     public long getElapsedTime() {
         long elapsedTime = this.end == null ?
-            new Date().getTime() - this.start.getTime() :
-            this.end.getTime() - this.start.getTime();
+                new Date().getTime() - this.start.getTime() :
+                this.end.getTime() - this.start.getTime();
         return elapsedTime;
     }
-       
+
 }

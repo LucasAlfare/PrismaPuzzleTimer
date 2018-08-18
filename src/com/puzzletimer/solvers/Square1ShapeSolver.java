@@ -5,119 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Square1ShapeSolver {
-    public static class State {
-        public int index;
-
-        public State(int index) {
-            this.index = index;
-        }
-
-        public State(boolean[] cuts) {
-            this.index = 0;
-
-            // bottom
-            for (int i = 0; i < 12; i++) {
-                this.index <<= 1;
-                if (cuts[23 - i]) {
-                    this.index |= 1;
-                }
-            }
-
-            // top
-            for (int i = 0; i < 12; i++) {
-                this.index <<= 1;
-                if (cuts[11 - i]) {
-                    this.index |= 1;
-                }
-            }
-        }
-
-        private static int rotate(int layer) {
-            return ((layer << 1) & 0xFFE) | ((layer >> 11) & 1);
-        }
-
-        private int getTop() {
-            return this.index & 0xFFF;
-        }
-
-        private int getBottom() {
-            return (this.index >> 12) & 0xFFF;
-        }
-
-        public State rotateTop() {
-            return new State((getBottom() << 12) | rotate(getTop()));
-        }
-
-        public State rotateBottom() {
-            return new State((rotate(getBottom()) << 12) | getTop());
-        }
-
-        public State twist() {
-            int top = getTop();
-            int bottom = getBottom();
-
-            int newTop = (top & 0xF80) | (bottom & 0x7F);
-            int newBottom = (bottom & 0xF80) | (top & 0x7F);
-
-            return new State((newBottom << 12) | newTop);
-        }
-
-        public boolean isTwistable() {
-            int top = getTop();
-            int bottom = getBottom();
-
-            return (top & (1 << 0)) != 0 &&
-                   (top & (1 << 6)) != 0 &&
-                   (bottom & (1 << 0)) != 0 &&
-                   (bottom & (1 << 6)) != 0;
-        }
-
-        public State applyMove(String move) {
-            State state = this;
-
-            if (move.equals("/")) {
-                state = state.twist();
-            } else {
-                Pattern p = Pattern.compile("\\((-?\\d+),(-?\\d+)\\)");
-                Matcher matcher = p.matcher(move);
-                matcher.find();
-
-                int top = Integer.parseInt(matcher.group(1));
-                for (int i = 0; i < top + 12; i++) {
-                    state = state.rotateTop();
-                }
-
-                int bottom = Integer.parseInt(matcher.group(2));
-                for (int i = 0; i < bottom + 12; i++) {
-                    state = state.rotateBottom();
-                }
-            }
-
-            return state;
-        }
-
-        public State applySequence(String[] sequence) {
-            State state = this;
-            for (String move : sequence) {
-                state = state.applyMove(move);
-            }
-
-            return state;
-        }
-
-        public static State id;
-
-        static {
-            id = new State(new boolean[] {
-                true, false, true, true, false, true, true, false, true, true, false, true,
-                true, true, false, true, true, false, true, true, false, true, true, false,
-            });
-        }
-    }
-
     // constants
     public static final int N_POSITIONS = 16777216;
-
     // distance table
     public static int[] distance;
 
@@ -221,5 +110,115 @@ public class Square1ShapeSolver {
         sequence.toArray(sequenceArray);
 
         return sequenceArray;
+    }
+
+    public static class State {
+        public static State id;
+
+        static {
+            id = new State(new boolean[]{
+                    true, false, true, true, false, true, true, false, true, true, false, true,
+                    true, true, false, true, true, false, true, true, false, true, true, false,
+            });
+        }
+
+        public int index;
+
+        public State(int index) {
+            this.index = index;
+        }
+
+        public State(boolean[] cuts) {
+            this.index = 0;
+
+            // bottom
+            for (int i = 0; i < 12; i++) {
+                this.index <<= 1;
+                if (cuts[23 - i]) {
+                    this.index |= 1;
+                }
+            }
+
+            // top
+            for (int i = 0; i < 12; i++) {
+                this.index <<= 1;
+                if (cuts[11 - i]) {
+                    this.index |= 1;
+                }
+            }
+        }
+
+        private static int rotate(int layer) {
+            return ((layer << 1) & 0xFFE) | ((layer >> 11) & 1);
+        }
+
+        private int getTop() {
+            return this.index & 0xFFF;
+        }
+
+        private int getBottom() {
+            return (this.index >> 12) & 0xFFF;
+        }
+
+        public State rotateTop() {
+            return new State((getBottom() << 12) | rotate(getTop()));
+        }
+
+        public State rotateBottom() {
+            return new State((rotate(getBottom()) << 12) | getTop());
+        }
+
+        public State twist() {
+            int top = getTop();
+            int bottom = getBottom();
+
+            int newTop = (top & 0xF80) | (bottom & 0x7F);
+            int newBottom = (bottom & 0xF80) | (top & 0x7F);
+
+            return new State((newBottom << 12) | newTop);
+        }
+
+        public boolean isTwistable() {
+            int top = getTop();
+            int bottom = getBottom();
+
+            return (top & (1 << 0)) != 0 &&
+                    (top & (1 << 6)) != 0 &&
+                    (bottom & (1 << 0)) != 0 &&
+                    (bottom & (1 << 6)) != 0;
+        }
+
+        public State applyMove(String move) {
+            State state = this;
+
+            if (move.equals("/")) {
+                state = state.twist();
+            } else {
+                Pattern p = Pattern.compile("\\((-?\\d+),(-?\\d+)\\)");
+                Matcher matcher = p.matcher(move);
+                matcher.find();
+
+                int top = Integer.parseInt(matcher.group(1));
+                for (int i = 0; i < top + 12; i++) {
+                    state = state.rotateTop();
+                }
+
+                int bottom = Integer.parseInt(matcher.group(2));
+                for (int i = 0; i < bottom + 12; i++) {
+                    state = state.rotateBottom();
+                }
+            }
+
+            return state;
+        }
+
+        public State applySequence(String[] sequence) {
+            State state = this;
+            for (String move : sequence) {
+                state = state.applyMove(move);
+            }
+
+            return state;
+        }
     }
 }

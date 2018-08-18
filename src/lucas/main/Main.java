@@ -1,6 +1,5 @@
 package lucas.main;//package teste_com_cstimer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -10,7 +9,7 @@ public class Main {
         System.out.println(Arrays.toString(new Search().solutionAsArray(FullCube.randomCube())));
     }
 
-    public static String scramble(){
+    public static String scramble() {
         NovosShapes[] shapes = {
                 NovosShapes.x222_PAIRED,
                 NovosShapes.PAIRED_x222,

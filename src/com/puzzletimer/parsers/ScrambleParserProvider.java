@@ -7,23 +7,23 @@ public class ScrambleParserProvider {
     private HashMap<String, ScrambleParser> scrambleParserMap;
 
     public ScrambleParserProvider() {
-        this.scrambleParsers = new ScrambleParser[] {
-            new EmptyScrambleParser(),
-            new FloppyCubeScrambleParser(),
-            new MegaminxScrambleParser(),
-            new ProfessorsCubeScrambleParser(),
-            new PyraminxScrambleParser(),
-            new RubiksClockScrambleParser(),
-            new RubiksCubeScrambleParser(),
-            new RubiksDominoScrambleParser(),
-            new RubiksPocketCubeScrambleParser(),
-            new RubiksRevengeScramblerParser(),
-            new RubiksTowerScramblerParser(),
-            new SkewbScrambleParser(),
-            new Square1ScrambleParser(),
-            new TowerCubeScrambleParser(),
-            new VCube6ScrambleParser(),
-            new VCube7ScrambleParser(),
+        this.scrambleParsers = new ScrambleParser[]{
+                new EmptyScrambleParser(),
+                new FloppyCubeScrambleParser(),
+                new MegaminxScrambleParser(),
+                new ProfessorsCubeScrambleParser(),
+                new PyraminxScrambleParser(),
+                new RubiksClockScrambleParser(),
+                new RubiksCubeScrambleParser(),
+                new RubiksDominoScrambleParser(),
+                new RubiksPocketCubeScrambleParser(),
+                new RubiksRevengeScramblerParser(),
+                new RubiksTowerScramblerParser(),
+                new SkewbScrambleParser(),
+                new Square1ScrambleParser(),
+                new TowerCubeScrambleParser(),
+                new VCube6ScrambleParser(),
+                new VCube7ScrambleParser(),
         };
 
         this.scrambleParserMap = new HashMap<String, ScrambleParser>();

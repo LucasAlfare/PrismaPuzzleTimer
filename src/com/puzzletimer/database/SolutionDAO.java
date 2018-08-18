@@ -1,14 +1,5 @@
 package com.puzzletimer.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
-
 import com.puzzletimer.models.Category;
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.Solution;
@@ -17,6 +8,11 @@ import com.puzzletimer.parsers.ScrambleParser;
 import com.puzzletimer.parsers.ScrambleParserProvider;
 import com.puzzletimer.scramblers.Scrambler;
 import com.puzzletimer.scramblers.ScramblerProvider;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 public class SolutionDAO {
     private Connection connection;
@@ -40,10 +36,10 @@ public class SolutionDAO {
 
         try {
             PreparedStatement statement = this.connection.prepareStatement(
-                "SELECT SOLUTION_ID, CATEGORY_ID, SCRAMBLER_ID, SEQUENCE, START, END, PENALTY " +
-                "FROM SOLUTION " +
-                "WHERE CATEGORY_ID = ? " +
-                "ORDER BY START DESC");
+                    "SELECT SOLUTION_ID, CATEGORY_ID, SCRAMBLER_ID, SEQUENCE, START, END, PENALTY " +
+                            "FROM SOLUTION " +
+                            "WHERE CATEGORY_ID = ? " +
+                            "ORDER BY START DESC");
 
             statement.setString(1, category.getCategoryId().toString());
 
@@ -74,7 +70,7 @@ public class SolutionDAO {
     }
 
     public void insert(Solution solution) {
-        insert(new Solution[] { solution });
+        insert(new Solution[]{solution});
     }
 
     public void insert(Solution[] solutions) {
@@ -82,7 +78,7 @@ public class SolutionDAO {
             this.connection.setAutoCommit(false);
 
             PreparedStatement statement = this.connection.prepareStatement(
-                "INSERT INTO SOLUTION VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    "INSERT INTO SOLUTION VALUES (?, ?, ?, ?, ?, ?, ?)");
 
             for (Solution solution : solutions) {
                 statement.setString(1, solution.getSolutionId().toString());
@@ -114,7 +110,7 @@ public class SolutionDAO {
     public void update(Solution solution) {
         try {
             PreparedStatement statement = this.connection.prepareStatement(
-                "UPDATE SOLUTION SET END = ?, PENALTY = ? WHERE SOLUTION_ID = ?");
+                    "UPDATE SOLUTION SET END = ?, PENALTY = ? WHERE SOLUTION_ID = ?");
 
             statement.setTimestamp(1, new Timestamp(solution.getTiming().getEnd().getTime()));
             statement.setString(2, solution.getPenalty());
@@ -131,7 +127,7 @@ public class SolutionDAO {
     public void delete(Solution solution) {
         try {
             PreparedStatement statement = this.connection.prepareStatement(
-                "DELETE FROM SOLUTION WHERE SOLUTION_ID = ?");
+                    "DELETE FROM SOLUTION WHERE SOLUTION_ID = ?");
 
             statement.setString(1, solution.getSolutionId().toString());
 

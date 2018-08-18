@@ -1,10 +1,10 @@
 package com.puzzletimer.util;
 
+import com.puzzletimer.models.Solution;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
-
-import com.puzzletimer.models.Solution;
 
 public class SolutionUtils {
     private static String formatSeconds(long time) {
@@ -22,8 +22,8 @@ public class SolutionUtils {
         long milliseconds = time % 1000;
 
         return sign +
-               seconds + "." +
-               String.format("%03d", milliseconds);
+                seconds + "." +
+                String.format("%03d", milliseconds);
     }
 
     public static String formatMinutes(long time) {
@@ -42,10 +42,10 @@ public class SolutionUtils {
         long milliseconds = time % 1000;
 
         return sign +
-               (minutes < 10 ? "0" + minutes : minutes) + ":" +
-               (seconds < 10 ? "0" + seconds : seconds) + "." +
+                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds : seconds) + "." +
                 String.format("%03d", milliseconds);
-    }   
+    }
 
     public static String format(long time) {
         if (-60000 < time && time < 60000) {
@@ -67,9 +67,9 @@ public class SolutionUtils {
         long milliseconds = time % 1000;
 
         return sign +
-               minutes + ":" +
-               (seconds < 10 ? "0" + seconds : seconds) + "." +
-               String.format("%03d", milliseconds);
+                minutes + ":" +
+                (seconds < 10 ? "0" + seconds : seconds) + "." +
+                String.format("%03d", milliseconds);
     }
 
     public static long parseTime(String input) {

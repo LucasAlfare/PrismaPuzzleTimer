@@ -1,22 +1,12 @@
 package com.puzzletimer.state;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
-
 import com.puzzletimer.models.Solution;
 
-public class SessionManager {
-    public static class Listener {
-        public void solutionsUpdated(Solution[] solutions) { }
-    }
+import java.util.*;
 
+public class SessionManager {
     private ArrayList<Listener> listeners;
     private HashMap<UUID, Solution> solutions;
-
     public SessionManager() {
         this.listeners = new ArrayList<Listener>();
         this.solutions = new HashMap<UUID, Solution>();
@@ -24,9 +14,9 @@ public class SessionManager {
 
     public Solution[] getSolutions() {
         ArrayList<Solution> solutions =
-            new ArrayList<Solution>(this.solutions.values());
+                new ArrayList<Solution>(this.solutions.values());
 
-        Collections.sort(solutions,new Comparator<Solution>() {
+        Collections.sort(solutions, new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
                 Date start1 = solution1.getTiming().getStart();
@@ -65,9 +55,9 @@ public class SessionManager {
 
     public void notifyListeners() {
         ArrayList<Solution> solutions =
-            new ArrayList<Solution>(this.solutions.values());
+                new ArrayList<Solution>(this.solutions.values());
 
-        Collections.sort(solutions,new Comparator<Solution>() {
+        Collections.sort(solutions, new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
                 Date start1 = solution1.getTiming().getStart();
@@ -90,5 +80,10 @@ public class SessionManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void solutionsUpdated(Solution[] solutions) {
+        }
     }
 }

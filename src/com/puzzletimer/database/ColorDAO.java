@@ -1,16 +1,12 @@
 package com.puzzletimer.database;
 
-import java.awt.Color;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.puzzletimer.models.ColorScheme;
 import com.puzzletimer.models.ColorScheme.FaceColor;
+
+import java.awt.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ColorDAO {
     private Connection connection;
@@ -26,8 +22,8 @@ public class ColorDAO {
             Statement statement = this.connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(
-                "SELECT PUZZLE_ID, FACE_ID, DEFAULT_R, DEFAULT_G, DEFAULT_B, R, G, B FROM COLOR " +
-                "ORDER BY \"ORDER\"");
+                    "SELECT PUZZLE_ID, FACE_ID, DEFAULT_R, DEFAULT_G, DEFAULT_B, R, G, B FROM COLOR " +
+                            "ORDER BY \"ORDER\"");
 
             while (resultSet.next()) {
                 String puzzleId = resultSet.getString(1);
@@ -44,11 +40,11 @@ public class ColorDAO {
                 }
 
                 faceColorMap.get(puzzleId).add(
-                    new FaceColor(
-                        puzzleId,
-                        faceId,
-                        new Color(defaultR, defaultG, defaultB),
-                        new Color(r, g, b)));
+                        new FaceColor(
+                                puzzleId,
+                                faceId,
+                                new Color(defaultR, defaultG, defaultB),
+                                new Color(r, g, b)));
             }
         } catch (SQLException e) {
             throw new DatabaseException(e);
@@ -72,7 +68,7 @@ public class ColorDAO {
             this.connection.setAutoCommit(false);
 
             PreparedStatement statement = this.connection.prepareStatement(
-                "UPDATE COLOR SET R = ?, G = ?, B = ? WHERE PUZZLE_ID = ? AND FACE_ID = ?");
+                    "UPDATE COLOR SET R = ?, G = ?, B = ? WHERE PUZZLE_ID = ? AND FACE_ID = ?");
 
             for (FaceColor faceColor : colorScheme.getFaceColors()) {
                 statement.setInt(1, faceColor.getColor().getRed());

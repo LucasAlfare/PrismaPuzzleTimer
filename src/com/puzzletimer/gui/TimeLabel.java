@@ -1,11 +1,8 @@
 package com.puzzletimer.gui;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.JComponent;
 
 @SuppressWarnings("serial")
 public class TimeLabel extends JComponent {
@@ -34,8 +31,8 @@ public class TimeLabel extends JComponent {
 
         Rectangle2D bounds = g2.getFontMetrics().getStringBounds(this.text, g2);
         g2.drawString(
-            this.text,
-            (int) ((getWidth() - bounds.getWidth()) / 2 - bounds.getX()),
-            (int) ((getHeight() - bounds.getHeight()) / 2 - bounds.getY()));
+                this.text,
+                (int) ((getWidth() - bounds.getWidth()) / 2 - bounds.getX()),
+                (int) ((getHeight() - bounds.getHeight()) / 2 - bounds.getY()));
     }
 }

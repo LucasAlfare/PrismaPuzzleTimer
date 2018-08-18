@@ -5,60 +5,33 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class TowerCubeSolver {
-    public static class State {
-        public byte[] cornersPermutation;
-        public byte[] edgesPermutation;
-
-        public State(byte[] cornersPermutation, byte[] edgesPermutation) {
-            this.cornersPermutation = cornersPermutation;
-            this.edgesPermutation = edgesPermutation;
-        }
-
-        public State multiply(State move) {
-            // corners
-            byte[] cornersPermutation = new byte[8];
-            for (int i = 0; i < 8; i++) {
-                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
-            }
-
-            // edges
-            byte[] edgesPermutation = new byte[4];
-            for (int i = 0; i < 4; i++) {
-                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
-            }
-
-            return new State(cornersPermutation, edgesPermutation);
-        }
-    }
-
     private static int N_CORNERS_PERMUTATIONS = 40320;
     private static int N_EDGES_PERMUTATIONS = 24;
     private static int N_MOVES = 10;
-
     private static State[] moves;
     private static int[][] cornersPermutationMove;
     private static int[][] edgesPermutationMove;
     private static int distance[][];
 
     static {
-        State moveU = new State(new byte[] { 3, 0, 1, 2, 4, 5, 6, 7 }, new byte[] { 0, 1, 2, 3 });
-        State moveD = new State(new byte[] { 0, 1, 2, 3, 5, 6, 7, 4 }, new byte[] { 0, 1, 2, 3 });
-        State moveL = new State(new byte[] { 7, 1, 2, 4, 3, 5, 6, 0 }, new byte[] { 3, 1, 2, 0 });
-        State moveR = new State(new byte[] { 0, 6, 5, 3, 4, 2, 1, 7 }, new byte[] { 0, 2, 1, 3 });
-        State moveF = new State(new byte[] { 0, 1, 7, 6, 4, 5, 3, 2 }, new byte[] { 0, 1, 3, 2 });
-        State moveB = new State(new byte[] { 5, 4, 2, 3, 1, 0, 6, 7 }, new byte[] { 1, 0, 2, 3 });
+        State moveU = new State(new byte[]{3, 0, 1, 2, 4, 5, 6, 7}, new byte[]{0, 1, 2, 3});
+        State moveD = new State(new byte[]{0, 1, 2, 3, 5, 6, 7, 4}, new byte[]{0, 1, 2, 3});
+        State moveL = new State(new byte[]{7, 1, 2, 4, 3, 5, 6, 0}, new byte[]{3, 1, 2, 0});
+        State moveR = new State(new byte[]{0, 6, 5, 3, 4, 2, 1, 7}, new byte[]{0, 2, 1, 3});
+        State moveF = new State(new byte[]{0, 1, 7, 6, 4, 5, 3, 2}, new byte[]{0, 1, 3, 2});
+        State moveB = new State(new byte[]{5, 4, 2, 3, 1, 0, 6, 7}, new byte[]{1, 0, 2, 3});
 
-        moves = new State[] {
-            moveU,
-            moveU.multiply(moveU),
-            moveU.multiply(moveU).multiply(moveU),
-            moveD,
-            moveD.multiply(moveD),
-            moveD.multiply(moveD).multiply(moveD),
-            moveL,
-            moveR,
-            moveF,
-            moveB,
+        moves = new State[]{
+                moveU,
+                moveU.multiply(moveU),
+                moveU.multiply(moveU).multiply(moveU),
+                moveD,
+                moveD.multiply(moveD),
+                moveD.multiply(moveD).multiply(moveD),
+                moveL,
+                moveR,
+                moveF,
+                moveB,
         };
 
         // move tables
@@ -67,7 +40,7 @@ public class TowerCubeSolver {
             State state = new State(IndexMapping.indexToPermutation(i, 8), new byte[4]);
             for (int j = 0; j < N_MOVES; j++) {
                 cornersPermutationMove[i][j] =
-                    IndexMapping.permutationToIndex(state.multiply(moves[j]).cornersPermutation);
+                        IndexMapping.permutationToIndex(state.multiply(moves[j]).cornersPermutation);
             }
         }
 
@@ -76,7 +49,7 @@ public class TowerCubeSolver {
             State state = new State(new byte[8], IndexMapping.indexToPermutation(i, 4));
             for (int j = 0; j < N_MOVES; j++) {
                 edgesPermutationMove[i][j] =
-                    IndexMapping.permutationToIndex(state.multiply(moves[j]).edgesPermutation);
+                        IndexMapping.permutationToIndex(state.multiply(moves[j]).edgesPermutation);
             }
         }
 
@@ -116,28 +89,28 @@ public class TowerCubeSolver {
     }
 
     public static String[] solve(State state) {
-        String[] moveNames = { "U", "U2", "U'", "D", "D2", "D'", "L", "R", "F", "B" };
+        String[] moveNames = {"U", "U2", "U'", "D", "D2", "D'", "L", "R", "F", "B"};
 
         ArrayList<String> sequence = new ArrayList<String>();
 
         int cornersPermutationIndex =
-            IndexMapping.permutationToIndex(state.cornersPermutation);
+                IndexMapping.permutationToIndex(state.cornersPermutation);
         int edgesPermutationIndex =
-            IndexMapping.permutationToIndex(state.edgesPermutation);
+                IndexMapping.permutationToIndex(state.edgesPermutation);
 
-        for (;;) {
+        for (; ; ) {
             if (distance[cornersPermutationIndex][edgesPermutationIndex] == 0) {
                 break;
             }
 
             for (int k = 0; k < N_MOVES; k++) {
                 int nextCornersPermutationIndex =
-                    cornersPermutationMove[cornersPermutationIndex][k];
+                        cornersPermutationMove[cornersPermutationIndex][k];
                 int nextEdgesPermutationIndex =
-                    edgesPermutationMove[edgesPermutationIndex][k];
+                        edgesPermutationMove[edgesPermutationIndex][k];
 
                 if (distance[nextCornersPermutationIndex][nextEdgesPermutationIndex] ==
-                    distance[cornersPermutationIndex][edgesPermutationIndex] - 1) {
+                        distance[cornersPermutationIndex][edgesPermutationIndex] - 1) {
                     sequence.add(moveNames[k]);
                     cornersPermutationIndex = nextCornersPermutationIndex;
                     edgesPermutationIndex = nextEdgesPermutationIndex;
@@ -156,16 +129,16 @@ public class TowerCubeSolver {
         String[] solution = solve(state);
 
         HashMap<String, String> inverseMoves = new HashMap<String, String>();
-        inverseMoves.put("U",  "U'");
+        inverseMoves.put("U", "U'");
         inverseMoves.put("U2", "U2");
         inverseMoves.put("U'", "U");
-        inverseMoves.put("D",  "D'");
+        inverseMoves.put("D", "D'");
         inverseMoves.put("D2", "D2");
         inverseMoves.put("D'", "D");
-        inverseMoves.put("L",  "L");
-        inverseMoves.put("R",  "R");
-        inverseMoves.put("F",  "F");
-        inverseMoves.put("B",  "B");
+        inverseMoves.put("L", "L");
+        inverseMoves.put("R", "R");
+        inverseMoves.put("F", "F");
+        inverseMoves.put("B", "B");
 
         String[] sequence = new String[solution.length];
         for (int i = 0; i < sequence.length; i++) {
@@ -177,9 +150,35 @@ public class TowerCubeSolver {
 
     public static State getRandomState(Random random) {
         return new State(
-            IndexMapping.indexToPermutation(
-                random.nextInt(N_CORNERS_PERMUTATIONS), 8),
-            IndexMapping.indexToPermutation(
-                random.nextInt(N_EDGES_PERMUTATIONS), 4));
+                IndexMapping.indexToPermutation(
+                        random.nextInt(N_CORNERS_PERMUTATIONS), 8),
+                IndexMapping.indexToPermutation(
+                        random.nextInt(N_EDGES_PERMUTATIONS), 4));
+    }
+
+    public static class State {
+        public byte[] cornersPermutation;
+        public byte[] edgesPermutation;
+
+        public State(byte[] cornersPermutation, byte[] edgesPermutation) {
+            this.cornersPermutation = cornersPermutation;
+            this.edgesPermutation = edgesPermutation;
+        }
+
+        public State multiply(State move) {
+            // corners
+            byte[] cornersPermutation = new byte[8];
+            for (int i = 0; i < 8; i++) {
+                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
+            }
+
+            // edges
+            byte[] edgesPermutation = new byte[4];
+            for (int i = 0; i < 4; i++) {
+                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
+            }
+
+            return new State(cornersPermutation, edgesPermutation);
+        }
     }
 }

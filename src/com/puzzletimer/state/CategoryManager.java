@@ -1,23 +1,14 @@
 package com.puzzletimer.state;
 
+import com.puzzletimer.models.Category;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.puzzletimer.models.Category;
-
 public class CategoryManager {
-    public static class Listener {
-        public void categoryAdded(Category category) { }
-        public void categoryRemoved(Category category) { }
-        public void categoryUpdated(Category category) { }
-        public void currentCategoryChanged(Category category) { }
-        public void categoriesUpdated(Category[] categories, Category currentCategory) { }
-    }
-
     private ArrayList<Listener> listeners;
     private ArrayList<Category> categories;
     private Category currentCategory;
-
     public CategoryManager(Category[] categories, Category currentCategory) {
         this.listeners = new ArrayList<Listener>();
         this.categories = new ArrayList<Category>(Arrays.asList(categories));
@@ -90,5 +81,22 @@ public class CategoryManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void categoryAdded(Category category) {
+        }
+
+        public void categoryRemoved(Category category) {
+        }
+
+        public void categoryUpdated(Category category) {
+        }
+
+        public void currentCategoryChanged(Category category) {
+        }
+
+        public void categoriesUpdated(Category[] categories, Category currentCategory) {
+        }
     }
 }

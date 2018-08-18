@@ -2,60 +2,59 @@
 
 package com.puzzletimer.timer;
 
-import java.util.Date;
-
+import au.com.emc.cubing.stackmat.StackmatListener;
+import au.com.emc.cubing.stackmat.StackmatManager;
+import au.com.emc.cubing.stackmat.StackmatState;
 import com.puzzletimer.models.Timing;
 import com.puzzletimer.state.TimerManager;
 
-import au.com.emc.cubing.stackmat.StackmatManager;
-import au.com.emc.cubing.stackmat.StackmatListener;
-import au.com.emc.cubing.stackmat.StackmatState;
+import java.util.Date;
 
 
 class StackmatTimerGen3Listener implements StackmatListener {
     private TimerManager timerManager;
-    
+
     public StackmatTimerGen3Listener(TimerManager theTimer) {
         timerManager = theTimer;
     }
-    
+
     public void stateUpdate(StackmatState oldState, StackmatState newState) {
-        
+
         // left hand state
         if (newState.getLeftHand()) {
             this.timerManager.pressLeftHand();
         } else {
             this.timerManager.releaseLeftHand();
         }
-        
+
         // right hand state
         if (newState.getRightHand()) {
             this.timerManager.pressRightHand();
         } else {
             this.timerManager.releaseRightHand();
-        }        
-        
+        }
+
         // update the solution timing
         long time = 60000 * newState.getMinutes()
                 + 1000 * newState.getSeconds()
                 + newState.getThousands();
         Date end = new Date();
         Date start = new Date(end.getTime() - time);
-        Timing timing = new Timing(start, end);  
-            
+        Timing timing = new Timing(start, end);
+
         if (newState.isReset()) {
             this.timerManager.resetTimer();
         } else if (oldState != null) {
-            if (newState.isRunning() && ! oldState.isRunning()) {
+            if (newState.isRunning() && !oldState.isRunning()) {
                 this.timerManager.startSolution();
-            } else if (! newState.isRunning() && oldState.isRunning()) {
+            } else if (!newState.isRunning() && oldState.isRunning()) {
                 this.timerManager.finishSolution(timing);
             } else {
-                this.timerManager.updateSolutionTiming(timing);                
+                this.timerManager.updateSolutionTiming(timing);
             }
         }
-        
-        
+
+
 //        // hands status
 //        if (data[0] == 'A' || data[0] == 'L' || data[0] == 'C') {
 //            this.timerManager.pressLeftHand();
@@ -140,8 +139,8 @@ class StackmatTimerGen3Listener implements StackmatListener {
 //                }
 //                break;
 //        }        
-        
-        
+
+
     }
 }
 
@@ -170,7 +169,7 @@ public class StackmatTimerGen3 implements Timer {
     @Override
     public void start() {
         StackmatManager smm = StackmatManager.getInstance();
-        this.stackmatListener = new StackmatTimerGen3Listener(timerManager);        
+        this.stackmatListener = new StackmatTimerGen3Listener(timerManager);
         smm.register(this.stackmatListener);
         smm.start();
     }

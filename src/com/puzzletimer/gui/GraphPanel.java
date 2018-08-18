@@ -1,28 +1,22 @@
 package com.puzzletimer.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import com.puzzletimer.models.Solution;
+import com.puzzletimer.util.SolutionUtils;
+
+import javax.swing.*;
+import java.awt.*;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.JPanel;
-
-import com.puzzletimer.models.Solution;
-import com.puzzletimer.util.SolutionUtils;
-
 @SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
     ArrayList<Long> solutionTimes;
-    private long solutionIntervalStart;
-    private long solutionIntervalEnd;
     ArrayList<Long> startTimes;
     long startIntervalStart;
     long startIntervalEnd;
+    private long solutionIntervalStart;
+    private long solutionIntervalEnd;
 
     public GraphPanel(Solution[] solutions) {
         setBackground(Color.WHITE);

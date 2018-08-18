@@ -14,7 +14,7 @@ public class RubiksRevengeScramblerParser implements ScrambleParser {
 
         ArrayList<String> moves = new ArrayList<String>();
 
-        for (;;) {
+        for (; ; ) {
             parser.skipSpaces();
 
             String move = "";

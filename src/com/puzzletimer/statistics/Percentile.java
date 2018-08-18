@@ -1,9 +1,9 @@
 package com.puzzletimer.statistics;
 
-import java.util.Arrays;
-
 import com.puzzletimer.models.Solution;
 import com.puzzletimer.util.SolutionUtils;
+
+import java.util.Arrays;
 
 public class Percentile implements StatisticalMeasure {
     private int minimumWindowSize;

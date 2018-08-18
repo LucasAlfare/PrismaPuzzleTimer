@@ -1,34 +1,5 @@
 package com.puzzletimer.gui;
 
-import static com.puzzletimer.Internationalization.identifier;
-
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.UUID;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-
-import net.miginfocom.swing.MigLayout;
-
 import com.puzzletimer.models.Category;
 import com.puzzletimer.models.PuzzleInfo;
 import com.puzzletimer.models.ScramblerInfo;
@@ -39,6 +10,19 @@ import com.puzzletimer.scramblers.ScramblerProvider;
 import com.puzzletimer.state.CategoryManager;
 import com.puzzletimer.tips.Tip;
 import com.puzzletimer.tips.TipProvider;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.UUID;
+
+import static com.puzzletimer.Internationalization.identifier;
 
 interface CategoryEditorListener {
     void categoryEdited(Category category);
@@ -201,11 +185,11 @@ class CategoryEditorDialog extends JDialog {
             public void actionPerformed(ActionEvent event) {
                 // scrambler
                 String scramblerId =
-                    ((ScramblerInfo) CategoryEditorDialog.this.comboBoxScrambler.getSelectedItem()).getScramblerId();
+                        ((ScramblerInfo) CategoryEditorDialog.this.comboBoxScrambler.getSelectedItem()).getScramblerId();
 
                 // description
                 String description =
-                    CategoryEditorDialog.this.textFieldDescription.getText();
+                        CategoryEditorDialog.this.textFieldDescription.getText();
 
                 // tip ids
                 ListModel listModel = CategoryEditorDialog.this.listTips.getModel();
@@ -216,10 +200,10 @@ class CategoryEditorDialog extends JDialog {
                 }
 
                 listener.categoryEdited(
-                    category
-                        .setScramblerId(scramblerId)
-                        .setDescription(description)
-                        .setTipIds(tipIds));
+                        category
+                                .setScramblerId(scramblerId)
+                                .setDescription(description)
+                                .setTipIds(tipIds));
 
                 dispose();
             }
@@ -262,22 +246,22 @@ class CategoryEditorDialog extends JDialog {
 
         // esc key closes window
         this.getRootPane().registerKeyboardAction(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    CategoryEditorDialog.this.setVisible(false);
-                }
-            },
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        CategoryEditorDialog.this.setVisible(false);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void createComponents() {
         setLayout(
-            new MigLayout(
-                "fill",
-                "[pref!][fill][pref!]",
-                "[pref!]8[pref!]8[pref!]8[pref!][grow]16[pref!]"));
+                new MigLayout(
+                        "fill",
+                        "[pref!][fill][pref!]",
+                        "[pref!]8[pref!]8[pref!]8[pref!][grow]16[pref!]"));
 
         add(new JLabel(identifier("category_editor.description")));
 
@@ -370,14 +354,14 @@ public class CategoryManagerFrame extends JFrame {
 
                 for (Category category : categories) {
                     ScramblerInfo scramblerInfo =
-                        scramblerProvider.get(category.getScramblerId()).getScramblerInfo();
+                            scramblerProvider.get(category.getScramblerId()).getScramblerInfo();
                     PuzzleInfo puzzleInfo =
-                        puzzleProvider.get(scramblerInfo.getPuzzleId()).getPuzzleInfo();
+                            puzzleProvider.get(scramblerInfo.getPuzzleId()).getPuzzleInfo();
 
-                    tableModel.addRow(new Object[] {
-                        category.getDescription(),
-                        puzzleInfo.getDescription(),
-                        scramblerInfo.getDescription(),
+                    tableModel.addRow(new Object[]{
+                            category.getDescription(),
+                            puzzleInfo.getDescription(),
+                            scramblerInfo.getDescription(),
                     });
                 }
 
@@ -387,36 +371,36 @@ public class CategoryManagerFrame extends JFrame {
 
         // set table selection behavior
         CategoryManagerFrame.this.table.getSelectionModel().addListSelectionListener(
-            new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent event) {
-                    int selectedIndex = CategoryManagerFrame.this.table.getSelectedRow();
+                new ListSelectionListener() {
+                    @Override
+                    public void valueChanged(ListSelectionEvent event) {
+                        int selectedIndex = CategoryManagerFrame.this.table.getSelectedRow();
 
-                    if (selectedIndex < 0) {
-                        CategoryManagerFrame.this.buttonEdit.setEnabled(false);
-                        CategoryManagerFrame.this.buttonRemove.setEnabled(false);
-                    } else {
-                        Category category = categoryManager.getCategories()[selectedIndex];
-                        Category currentCategory = categoryManager.getCurrentCategory();
+                        if (selectedIndex < 0) {
+                            CategoryManagerFrame.this.buttonEdit.setEnabled(false);
+                            CategoryManagerFrame.this.buttonRemove.setEnabled(false);
+                        } else {
+                            Category category = categoryManager.getCategories()[selectedIndex];
+                            Category currentCategory = categoryManager.getCurrentCategory();
 
-                        CategoryManagerFrame.this.buttonEdit.setEnabled(
-                            category != currentCategory);
-                        CategoryManagerFrame.this.buttonRemove.setEnabled(
-                            category != currentCategory && category.isUserDefined());
+                            CategoryManagerFrame.this.buttonEdit.setEnabled(
+                                    category != currentCategory);
+                            CategoryManagerFrame.this.buttonRemove.setEnabled(
+                                    category != currentCategory && category.isUserDefined());
+                        }
                     }
-                }
-            });
+                });
 
         // set add button behavior
         this.buttonAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 Category category = new Category(
-                    UUID.randomUUID(),
-                    "RUBIKS-CUBE-RANDOM",
-                    identifier("category_manager.new_category"),
-                    true,
-                    new String[0]);
+                        UUID.randomUUID(),
+                        "RUBIKS-CUBE-RANDOM",
+                        identifier("category_manager.new_category"),
+                        true,
+                        new String[0]);
 
                 CategoryEditorListener listener = new CategoryEditorListener() {
                     @Override
@@ -426,14 +410,14 @@ public class CategoryManagerFrame extends JFrame {
                 };
 
                 CategoryEditorDialog dialog = new CategoryEditorDialog(
-                    CategoryManagerFrame.this,
-                    true,
-                    puzzleProvider.getAll(),
-                    scramblerProvider.getAll(),
-                    tipProvider.getAll(),
-                    category,
-                    true,
-                    listener);
+                        CategoryManagerFrame.this,
+                        true,
+                        puzzleProvider.getAll(),
+                        scramblerProvider.getAll(),
+                        tipProvider.getAll(),
+                        category,
+                        true,
+                        listener);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
@@ -454,14 +438,14 @@ public class CategoryManagerFrame extends JFrame {
                 };
 
                 CategoryEditorDialog dialog = new CategoryEditorDialog(
-                    CategoryManagerFrame.this,
-                    true,
-                    puzzleProvider.getAll(),
-                    scramblerProvider.getAll(),
-                    tipProvider.getAll(),
-                    category,
-                    false,
-                    listener);
+                        CategoryManagerFrame.this,
+                        true,
+                        puzzleProvider.getAll(),
+                        scramblerProvider.getAll(),
+                        tipProvider.getAll(),
+                        category,
+                        false,
+                        listener);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
@@ -472,10 +456,10 @@ public class CategoryManagerFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent event) {
                 int result = JOptionPane.showConfirmDialog(
-                    CategoryManagerFrame.this,
-                    identifier("category_manager.category_removal_confirmation_message"),
-                    identifier("category_manager.remove_category"),
-                    JOptionPane.YES_NO_CANCEL_OPTION);
+                        CategoryManagerFrame.this,
+                        identifier("category_manager.category_removal_confirmation_message"),
+                        identifier("category_manager.remove_category"),
+                        JOptionPane.YES_NO_CANCEL_OPTION);
                 if (result != JOptionPane.YES_OPTION) {
                     return;
                 }
@@ -496,14 +480,14 @@ public class CategoryManagerFrame extends JFrame {
 
         // esc key closes window
         this.getRootPane().registerKeyboardAction(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    CategoryManagerFrame.this.setVisible(false);
-                }
-            },
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        CategoryManagerFrame.this.setVisible(false);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void createComponents() {

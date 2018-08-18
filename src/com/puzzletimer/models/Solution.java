@@ -35,11 +35,11 @@ public class Solution {
 
     public Solution setTiming(Timing timing) {
         return new Solution(
-            this.solutionId,
-            this.categoryId,
-            this.scramble,
-            timing,
-            this.penalty);
+                this.solutionId,
+                this.categoryId,
+                this.scramble,
+                timing,
+                this.penalty);
     }
 
     public String getPenalty() {
@@ -48,10 +48,10 @@ public class Solution {
 
     public Solution setPenalty(String penalty) {
         return new Solution(
-            this.solutionId,
-            this.categoryId,
-            this.scramble,
-            this.timing,
-            penalty);
+                this.solutionId,
+                this.categoryId,
+                this.scramble,
+                this.timing,
+                penalty);
     }
 }

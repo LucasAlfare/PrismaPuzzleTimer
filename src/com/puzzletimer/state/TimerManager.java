@@ -1,43 +1,19 @@
 package com.puzzletimer.state;
 
+import com.puzzletimer.models.Timing;
+import com.puzzletimer.timer.Timer;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimerTask;
 
-import com.puzzletimer.models.Timing;
-import com.puzzletimer.timer.Timer;
-
 public class TimerManager {
-    public static class Listener {
-        // timer
-        public void timerChanged(Timer timer) { }
-        public void timerReset() { }
-
-        // hands
-        public void leftHandPressed() { }
-        public void leftHandReleased() { }
-        public void rightHandPressed() { }
-        public void rightHandReleased() { }
-
-        // inspection
-        public void inspectionEnabledSet(boolean inspectionEnabled) { }
-        public void inspectionStarted() { }
-        public void inspectionRunning(long remainingTime) { }
-        public void inspectionFinished() { }
-
-        // solution
-        public void solutionStarted() { }
-        public void solutionRunning(Timing timing) { }
-        public void solutionFinished(Timing timing, String penalty) { }
-    }
-
     private ArrayList<Listener> listeners;
     private Timer currentTimer;
     private boolean inspectionEnabled;
     private java.util.Timer repeater;
     private Date inspectionStart;
     private String penalty;
-
     public TimerManager() {
         this.listeners = new ArrayList<Listener>();
         this.currentTimer = null;
@@ -46,9 +22,6 @@ public class TimerManager {
         this.inspectionStart = null;
         this.penalty = "";
     }
-
-
-    // timer
 
     public void setTimer(Timer timer) {
         // suspend running inspection
@@ -72,19 +45,22 @@ public class TimerManager {
         this.currentTimer.start();
     }
 
+
+    // timer
+
     public void resetTimer() {
         for (Listener listener : this.listeners) {
             listener.timerReset();
         }
     }
 
-    // hands
-
     public void pressLeftHand() {
         for (Listener listener : this.listeners) {
             listener.leftHandPressed();
         }
     }
+
+    // hands
 
     public void releaseLeftHand() {
         for (Listener listener : this.listeners) {
@@ -104,12 +80,12 @@ public class TimerManager {
         }
     }
 
-
-    // inspection
-
     public boolean isInspectionEnabled() {
         return this.inspectionEnabled;
     }
+
+
+    // inspection
 
     public void setInspectionEnabled(boolean inspectionEnabled) {
         this.inspectionEnabled = inspectionEnabled;
@@ -162,9 +138,6 @@ public class TimerManager {
         this.repeater.schedule(timerTask, 0, 10);
     }
 
-
-    // solution
-
     public void startSolution() {
         if (this.inspectionStart != null) {
             this.repeater.cancel();
@@ -180,6 +153,9 @@ public class TimerManager {
         }
     }
 
+
+    // solution
+
     public void updateSolutionTiming(Timing timing) {
         for (Listener listener : this.listeners) {
             listener.solutionRunning(timing);
@@ -194,14 +170,59 @@ public class TimerManager {
         this.penalty = "";
     }
 
-
-    // listeners
-
     public void addListener(Listener listener) {
         this.listeners.add(listener);
     }
 
+
+    // listeners
+
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        // timer
+        public void timerChanged(Timer timer) {
+        }
+
+        public void timerReset() {
+        }
+
+        // hands
+        public void leftHandPressed() {
+        }
+
+        public void leftHandReleased() {
+        }
+
+        public void rightHandPressed() {
+        }
+
+        public void rightHandReleased() {
+        }
+
+        // inspection
+        public void inspectionEnabledSet(boolean inspectionEnabled) {
+        }
+
+        public void inspectionStarted() {
+        }
+
+        public void inspectionRunning(long remainingTime) {
+        }
+
+        public void inspectionFinished() {
+        }
+
+        // solution
+        public void solutionStarted() {
+        }
+
+        public void solutionRunning(Timing timing) {
+        }
+
+        public void solutionFinished(Timing timing, String penalty) {
+        }
     }
 }

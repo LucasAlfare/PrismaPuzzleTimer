@@ -1,26 +1,18 @@
 package com.puzzletimer.state;
 
-import java.util.ArrayList;
-
 import com.puzzletimer.models.Category;
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.scramblers.Scrambler;
 import com.puzzletimer.scramblers.ScramblerProvider;
 
-public class ScrambleManager {
-    public static class Listener {
-        public void scramblesAdded(Scramble[] scrambles) { }
-        public void scramblesRemoved(Scramble[] scrambles) { }
-        public void scrambleQueueUpdated(Scramble[] queue) { }
-        public void scrambleChanged(Scramble scramble) { }
-    }
+import java.util.ArrayList;
 
+public class ScrambleManager {
     private ArrayList<Listener> listeners;
     private ScramblerProvider scramblerProvider;
     private Scrambler currentScrambler;
     private ArrayList<Scramble> queue;
     private Scramble currentScramble;
-
     public ScrambleManager(ScramblerProvider scramblerProvider, Scrambler scrambler) {
         this.listeners = new ArrayList<Listener>();
         this.scramblerProvider = scramblerProvider;
@@ -98,7 +90,7 @@ public class ScrambleManager {
     public void changeScramble() {
         if (this.queue.size() > 0) {
             this.currentScramble = this.queue.get(0);
-            removeScrambles(new int[] { 0 });
+            removeScrambles(new int[]{0});
         } else {
             this.currentScramble = this.currentScrambler.getNextScramble();
         }
@@ -122,5 +114,19 @@ public class ScrambleManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void scramblesAdded(Scramble[] scrambles) {
+        }
+
+        public void scramblesRemoved(Scramble[] scrambles) {
+        }
+
+        public void scrambleQueueUpdated(Scramble[] queue) {
+        }
+
+        public void scrambleChanged(Scramble scramble) {
+        }
     }
 }

@@ -5,40 +5,12 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RubiksTowerSolver {
-    public static class State {
-        public byte[] orientation;
-        public byte[] edgesPermutation;
-        public byte[] cornersPermutation;
-
-        public State(byte[] orientation, byte[] edgesPermutation, byte[] cornersPermutation) {
-            this.orientation = orientation;
-            this.edgesPermutation = edgesPermutation;
-            this.cornersPermutation = cornersPermutation;
-        }
-
-        public State multiply(State move) {
-            byte[] orientation = new byte[8];
-            byte[] edgesPermutation = new byte[8];
-            byte[] cornersPermutation = new byte[8];
-
-            for (int i = 0; i < 8; i++) {
-                orientation[i] = (byte) ((this.orientation[move.edgesPermutation[i]] + move.orientation[i]) % 3);
-                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
-                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
-            }
-
-            return new State(orientation, edgesPermutation, cornersPermutation);
-        }
-    }
-
     private final int N_ORIENTATIONS = 2187;
     private final int N_EDGES_PERMUTATIONS = 40320;
     private final int N_EDGES_COMBINATIONS = 70;
     private final int N_CORNERS_PERMUTATIONS = 40320;
     private final int N_CORNERS_COMBINATIONS = 70;
-
     private boolean initialized;
-
     private State[] moves1;
     private String[] moveNames1;
     private int[] faces1;
@@ -53,100 +25,99 @@ public class RubiksTowerSolver {
     private byte[] orientationDistance;
     private byte[][] edgesPermutationDistance;
     private byte[][] cornersPermutationDistance;
-
     public RubiksTowerSolver() {
         this.initialized = false;
     }
 
     private void initialize() {
         // moves
-        State moveUw = new State(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 3, 0, 1, 2, 4, 5, 6, 7 }, new byte[] { 3, 0, 1, 2, 4, 5, 6, 7 });
-        State moveDw = new State(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 0, 1, 2, 3, 5, 6, 7, 4 }, new byte[] { 0, 1, 2, 3, 5, 6, 7, 4 });
-        State moveLw = new State(new byte[] { 2, 0, 0, 1, 1, 0, 0, 2 }, new byte[] { 4, 1, 2, 0, 7, 5, 6, 3 }, new byte[] { 4, 1, 2, 0, 7, 5, 6, 3 });
-        State moveRw = new State(new byte[] { 0, 1, 2, 0, 0, 2, 1, 0 }, new byte[] { 0, 2, 6, 3, 4, 1, 5, 7 }, new byte[] { 0, 2, 6, 3, 4, 1, 5, 7 });
-        State moveFw = new State(new byte[] { 0, 0, 1, 2, 0, 0, 2, 1 }, new byte[] { 0, 1, 3, 7, 4, 5, 2, 6 }, new byte[] { 0, 1, 3, 7, 4, 5, 2, 6 });
-        State moveBw = new State(new byte[] { 1, 2, 0, 0, 2, 1, 0, 0 }, new byte[] { 1, 5, 2, 3, 0, 4, 6, 7 }, new byte[] { 1, 5, 2, 3, 0, 4, 6, 7 });
-        State moveU  = new State(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, new byte[] { 3, 0, 1, 2, 4, 5, 6, 7 });
-        State moveD  = new State(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, new byte[] { 0, 1, 2, 3, 5, 6, 7, 4 });
+        State moveUw = new State(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{3, 0, 1, 2, 4, 5, 6, 7}, new byte[]{3, 0, 1, 2, 4, 5, 6, 7});
+        State moveDw = new State(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{0, 1, 2, 3, 5, 6, 7, 4}, new byte[]{0, 1, 2, 3, 5, 6, 7, 4});
+        State moveLw = new State(new byte[]{2, 0, 0, 1, 1, 0, 0, 2}, new byte[]{4, 1, 2, 0, 7, 5, 6, 3}, new byte[]{4, 1, 2, 0, 7, 5, 6, 3});
+        State moveRw = new State(new byte[]{0, 1, 2, 0, 0, 2, 1, 0}, new byte[]{0, 2, 6, 3, 4, 1, 5, 7}, new byte[]{0, 2, 6, 3, 4, 1, 5, 7});
+        State moveFw = new State(new byte[]{0, 0, 1, 2, 0, 0, 2, 1}, new byte[]{0, 1, 3, 7, 4, 5, 2, 6}, new byte[]{0, 1, 3, 7, 4, 5, 2, 6});
+        State moveBw = new State(new byte[]{1, 2, 0, 0, 2, 1, 0, 0}, new byte[]{1, 5, 2, 3, 0, 4, 6, 7}, new byte[]{1, 5, 2, 3, 0, 4, 6, 7});
+        State moveU = new State(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{0, 1, 2, 3, 4, 5, 6, 7}, new byte[]{3, 0, 1, 2, 4, 5, 6, 7});
+        State moveD = new State(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{0, 1, 2, 3, 4, 5, 6, 7}, new byte[]{0, 1, 2, 3, 5, 6, 7, 4});
 
-        this.moves1 = new State[] {
-            moveUw,
-            moveUw.multiply(moveUw),
-            moveUw.multiply(moveUw).multiply(moveUw),
-            moveDw,
-            moveDw.multiply(moveDw),
-            moveDw.multiply(moveDw).multiply(moveDw),
-            moveLw,
-            moveLw.multiply(moveLw),
-            moveLw.multiply(moveLw).multiply(moveLw),
-            moveRw,
-            moveRw.multiply(moveRw),
-            moveRw.multiply(moveRw).multiply(moveRw),
-            moveFw,
-            moveFw.multiply(moveFw),
-            moveFw.multiply(moveFw).multiply(moveFw),
-            moveBw,
-            moveBw.multiply(moveBw),
-            moveBw.multiply(moveBw).multiply(moveBw),
+        this.moves1 = new State[]{
+                moveUw,
+                moveUw.multiply(moveUw),
+                moveUw.multiply(moveUw).multiply(moveUw),
+                moveDw,
+                moveDw.multiply(moveDw),
+                moveDw.multiply(moveDw).multiply(moveDw),
+                moveLw,
+                moveLw.multiply(moveLw),
+                moveLw.multiply(moveLw).multiply(moveLw),
+                moveRw,
+                moveRw.multiply(moveRw),
+                moveRw.multiply(moveRw).multiply(moveRw),
+                moveFw,
+                moveFw.multiply(moveFw),
+                moveFw.multiply(moveFw).multiply(moveFw),
+                moveBw,
+                moveBw.multiply(moveBw),
+                moveBw.multiply(moveBw).multiply(moveBw),
         };
 
-        this.moveNames1 = new String[] {
-            "Uw", "Uw2", "Uw'",
-            "Dw", "Dw2", "Dw'",
-            "Lw", "Lw2", "Lw'",
-            "Rw", "Rw2", "Rw'",
-            "Fw", "Fw2", "Fw'",
-            "Bw", "Bw2", "Bw'",
+        this.moveNames1 = new String[]{
+                "Uw", "Uw2", "Uw'",
+                "Dw", "Dw2", "Dw'",
+                "Lw", "Lw2", "Lw'",
+                "Rw", "Rw2", "Rw'",
+                "Fw", "Fw2", "Fw'",
+                "Bw", "Bw2", "Bw'",
         };
 
-        this.faces1 = new int[] {
-            0, 0, 0,
-            1, 1, 1,
-            2, 2, 2,
-            3, 3, 3,
-            4, 4, 4,
-            5, 5, 5,
+        this.faces1 = new int[]{
+                0, 0, 0,
+                1, 1, 1,
+                2, 2, 2,
+                3, 3, 3,
+                4, 4, 4,
+                5, 5, 5,
         };
 
-        this.moves2 = new State[] {
-            moveUw,
-            moveUw.multiply(moveUw),
-            moveUw.multiply(moveUw).multiply(moveUw),
-            moveDw,
-            moveDw.multiply(moveDw),
-            moveDw.multiply(moveDw).multiply(moveDw),
-            moveLw.multiply(moveLw),
-            moveRw.multiply(moveRw),
-            moveFw.multiply(moveFw),
-            moveBw.multiply(moveBw),
-            moveU,
-            moveU.multiply(moveU),
-            moveU.multiply(moveU).multiply(moveU),
-            moveD,
-            moveD.multiply(moveD),
-            moveD.multiply(moveD).multiply(moveD),
+        this.moves2 = new State[]{
+                moveUw,
+                moveUw.multiply(moveUw),
+                moveUw.multiply(moveUw).multiply(moveUw),
+                moveDw,
+                moveDw.multiply(moveDw),
+                moveDw.multiply(moveDw).multiply(moveDw),
+                moveLw.multiply(moveLw),
+                moveRw.multiply(moveRw),
+                moveFw.multiply(moveFw),
+                moveBw.multiply(moveBw),
+                moveU,
+                moveU.multiply(moveU),
+                moveU.multiply(moveU).multiply(moveU),
+                moveD,
+                moveD.multiply(moveD),
+                moveD.multiply(moveD).multiply(moveD),
         };
 
-        this.moveNames2 = new String[] {
-            "Uw", "Uw2", "Uw'",
-            "Dw", "Dw2", "Dw'",
-            "Lw2",
-            "Rw2",
-            "Fw2",
-            "Bw2",
-            "U",  "U2",  "U'",
-            "D",  "D2",  "D'",
+        this.moveNames2 = new String[]{
+                "Uw", "Uw2", "Uw'",
+                "Dw", "Dw2", "Dw'",
+                "Lw2",
+                "Rw2",
+                "Fw2",
+                "Bw2",
+                "U", "U2", "U'",
+                "D", "D2", "D'",
         };
 
-        this.faces2 = new int[] {
-            0, 0, 0,
-            1, 1, 1,
-            2,
-            3,
-            4,
-            5,
-            6, 6, 6,
-            7, 7, 7,
+        this.faces2 = new int[]{
+                0, 0, 0,
+                1, 1, 1,
+                2,
+                3,
+                4,
+                5,
+                6, 6, 6,
+                7, 7, 7,
         };
 
         // move tables
@@ -155,8 +126,8 @@ public class RubiksTowerSolver {
             State state = new State(IndexMapping.indexToZeroSumOrientation(i, 3, 8), new byte[8], new byte[8]);
             for (int j = 0; j < this.moves1.length; j++) {
                 this.orientationMove[i][j] =
-                    IndexMapping.zeroSumOrientationToIndex(
-                        state.multiply(this.moves1[j]).orientation, 3);
+                        IndexMapping.zeroSumOrientationToIndex(
+                                state.multiply(this.moves1[j]).orientation, 3);
             }
         }
 
@@ -165,8 +136,8 @@ public class RubiksTowerSolver {
             State state = new State(new byte[8], IndexMapping.indexToPermutation(i, 8), new byte[8]);
             for (int j = 0; j < this.moves2.length; j++) {
                 this.edgesPermutationMove[i][j] =
-                    IndexMapping.permutationToIndex(
-                        state.multiply(this.moves2[j]).edgesPermutation);
+                        IndexMapping.permutationToIndex(
+                                state.multiply(this.moves2[j]).edgesPermutation);
             }
         }
 
@@ -204,8 +175,8 @@ public class RubiksTowerSolver {
             State state = new State(new byte[8], new byte[8], IndexMapping.indexToPermutation(i, 8));
             for (int j = 0; j < this.moves2.length; j++) {
                 this.cornersPermutationMove[i][j] =
-                    IndexMapping.permutationToIndex(
-                        state.multiply(this.moves2[j]).cornersPermutation);
+                        IndexMapping.permutationToIndex(
+                                state.multiply(this.moves2[j]).cornersPermutation);
             }
         }
 
@@ -335,7 +306,7 @@ public class RubiksTowerSolver {
 
         // orientation
         int orientation =
-            IndexMapping.zeroSumOrientationToIndex(state.orientation, 3);
+                IndexMapping.zeroSumOrientationToIndex(state.orientation, 3);
 
         for (int depth = 0; ; depth++) {
             ArrayList<Integer> solution = new ArrayList<Integer>();
@@ -374,10 +345,10 @@ public class RubiksTowerSolver {
 
                 solution.add(i);
                 if (search(
-                    this.orientationMove[orientation][i],
-                    depth - 1,
-                    solution,
-                    this.faces1[i])) {
+                        this.orientationMove[orientation][i],
+                        depth - 1,
+                        solution,
+                        this.faces1[i])) {
                     return true;
                 }
                 solution.remove(solution.size() - 1);
@@ -390,7 +361,7 @@ public class RubiksTowerSolver {
     private String[] solve2(State state) {
         // edges permutation
         int edgesPermutation =
-            IndexMapping.permutationToIndex(state.edgesPermutation);
+                IndexMapping.permutationToIndex(state.edgesPermutation);
 
         // edges combination
         boolean[] isTopEdge = new boolean[8];
@@ -401,7 +372,7 @@ public class RubiksTowerSolver {
 
         // corners permutation
         int cornersPermutation =
-            IndexMapping.permutationToIndex(state.cornersPermutation);
+                IndexMapping.permutationToIndex(state.cornersPermutation);
 
         // corners combination
         boolean[] isTopCorner = new boolean[8];
@@ -413,13 +384,13 @@ public class RubiksTowerSolver {
         for (int depth = 0; ; depth++) {
             ArrayList<Integer> solution = new ArrayList<Integer>();
             if (search2(
-                edgesPermutation,
-                edgesCombination,
-                cornersPermutation,
-                cornersCombination,
-                depth,
-                solution,
-                -1)) {
+                    edgesPermutation,
+                    edgesCombination,
+                    cornersPermutation,
+                    cornersCombination,
+                    depth,
+                    solution,
+                    -1)) {
                 String[] sequence = new String[solution.size()];
                 for (int i = 0; i < solution.size(); i++) {
                     sequence[i] = this.moveNames2[solution.get(i)];
@@ -436,7 +407,7 @@ public class RubiksTowerSolver {
         }
 
         if (this.edgesPermutationDistance[edgesPermutation][cornersCombination] <= depth &&
-            this.cornersPermutationDistance[cornersPermutation][edgesCombination] <= depth) {
+                this.cornersPermutationDistance[cornersPermutation][edgesCombination] <= depth) {
             for (int i = 0; i < this.moves2.length; i++) {
                 if (this.faces2[i] == lastFace) {
                     continue;
@@ -444,13 +415,13 @@ public class RubiksTowerSolver {
 
                 solution.add(i);
                 if (search2(
-                    this.edgesPermutationMove[edgesPermutation][i],
-                    this.edgesCombinationMove[edgesCombination][i],
-                    this.cornersPermutationMove[cornersPermutation][i],
-                    this.cornersCombinationMove[cornersCombination][i],
-                    depth - 1,
-                    solution,
-                    this.faces2[i])) {
+                        this.edgesPermutationMove[edgesPermutation][i],
+                        this.edgesCombinationMove[edgesCombination][i],
+                        this.cornersPermutationMove[cornersPermutation][i],
+                        this.cornersCombinationMove[cornersCombination][i],
+                        depth - 1,
+                        solution,
+                        this.faces2[i])) {
                     return true;
                 }
                 solution.remove(solution.size() - 1);
@@ -464,28 +435,28 @@ public class RubiksTowerSolver {
         String[] solution = solve(state);
 
         HashMap<String, String> inverseMoveNames = new HashMap<String, String>();
-        inverseMoveNames.put("Uw",  "Uw'");
+        inverseMoveNames.put("Uw", "Uw'");
         inverseMoveNames.put("Uw2", "Uw2");
         inverseMoveNames.put("Uw'", "Uw");
-        inverseMoveNames.put("Dw",  "Dw'");
+        inverseMoveNames.put("Dw", "Dw'");
         inverseMoveNames.put("Dw2", "Dw2");
         inverseMoveNames.put("Dw'", "Dw");
-        inverseMoveNames.put("Lw",  "Lw'");
+        inverseMoveNames.put("Lw", "Lw'");
         inverseMoveNames.put("Lw2", "Lw2");
         inverseMoveNames.put("Lw'", "Lw");
-        inverseMoveNames.put("Rw",  "Rw'");
+        inverseMoveNames.put("Rw", "Rw'");
         inverseMoveNames.put("Rw2", "Rw2");
         inverseMoveNames.put("Rw'", "Rw");
-        inverseMoveNames.put("Fw",  "Fw'");
+        inverseMoveNames.put("Fw", "Fw'");
         inverseMoveNames.put("Fw2", "Fw2");
         inverseMoveNames.put("Fw'", "Fw");
-        inverseMoveNames.put("Bw",  "Bw'");
+        inverseMoveNames.put("Bw", "Bw'");
         inverseMoveNames.put("Bw2", "Bw2");
         inverseMoveNames.put("Bw'", "Bw");
-        inverseMoveNames.put("U",  "U'");
+        inverseMoveNames.put("U", "U'");
         inverseMoveNames.put("U2", "U2");
         inverseMoveNames.put("U'", "U");
-        inverseMoveNames.put("D",  "D'");
+        inverseMoveNames.put("D", "D'");
         inverseMoveNames.put("D2", "D2");
         inverseMoveNames.put("D'", "D");
 
@@ -499,15 +470,41 @@ public class RubiksTowerSolver {
 
     public State getRandomState(Random random) {
         byte[] orientation =
-            IndexMapping.indexToZeroSumOrientation(
-                random.nextInt(this.N_ORIENTATIONS), 3, 8);
+                IndexMapping.indexToZeroSumOrientation(
+                        random.nextInt(this.N_ORIENTATIONS), 3, 8);
         byte[] edgesPermutation =
-            IndexMapping.indexToPermutation(
-                random.nextInt(this.N_EDGES_PERMUTATIONS), 8);
+                IndexMapping.indexToPermutation(
+                        random.nextInt(this.N_EDGES_PERMUTATIONS), 8);
         byte[] cornersPermutation =
-            IndexMapping.indexToPermutation(
-                random.nextInt(this.N_CORNERS_PERMUTATIONS), 8);
+                IndexMapping.indexToPermutation(
+                        random.nextInt(this.N_CORNERS_PERMUTATIONS), 8);
 
         return new State(orientation, edgesPermutation, cornersPermutation);
+    }
+
+    public static class State {
+        public byte[] orientation;
+        public byte[] edgesPermutation;
+        public byte[] cornersPermutation;
+
+        public State(byte[] orientation, byte[] edgesPermutation, byte[] cornersPermutation) {
+            this.orientation = orientation;
+            this.edgesPermutation = edgesPermutation;
+            this.cornersPermutation = cornersPermutation;
+        }
+
+        public State multiply(State move) {
+            byte[] orientation = new byte[8];
+            byte[] edgesPermutation = new byte[8];
+            byte[] cornersPermutation = new byte[8];
+
+            for (int i = 0; i < 8; i++) {
+                orientation[i] = (byte) ((this.orientation[move.edgesPermutation[i]] + move.orientation[i]) % 3);
+                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
+                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
+            }
+
+            return new State(orientation, edgesPermutation, cornersPermutation);
+        }
     }
 }

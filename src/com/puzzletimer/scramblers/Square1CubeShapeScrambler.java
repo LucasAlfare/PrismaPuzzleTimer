@@ -1,13 +1,13 @@
 package com.puzzletimer.scramblers;
 
-import java.util.Random;
-
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
 import com.puzzletimer.solvers.Square1Solver;
 import lucas.main.FullCube;
 import lucas.main.NovosShapes;
 import lucas.main.Search;
+
+import java.util.Random;
 
 public class Square1CubeShapeScrambler implements Scrambler {
     private ScramblerInfo scramblerInfo;

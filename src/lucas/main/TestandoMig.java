@@ -11,7 +11,7 @@ public class TestandoMig {
 
     }
 
-    public static ArrayList<CubeShapeIndex> templateParaLista(String template){
+    public static ArrayList<CubeShapeIndex> templateParaLista(String template) {
         ArrayList<String> separados = new ArrayList<>(
                 Arrays.asList(template.replaceAll(" ", "").toUpperCase().replaceAll("X", "x").split(";"))
         );
@@ -27,9 +27,9 @@ public class TestandoMig {
         return ret;
     }
 
-    public static String listaParaTemplate(ArrayList<CubeShapeIndex> lista){
+    public static String listaParaTemplate(ArrayList<CubeShapeIndex> lista) {
         StringBuilder ret = new StringBuilder();
-        for (CubeShapeIndex s : lista){
+        for (CubeShapeIndex s : lista) {
             ret.append(s).append("; ");
         }
         return ret.toString();

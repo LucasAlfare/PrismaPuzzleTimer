@@ -1,18 +1,13 @@
 package com.puzzletimer.state;
 
+import com.puzzletimer.models.ConfigurationEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.puzzletimer.models.ConfigurationEntry;
-
 public class ConfigurationManager {
-    public static class Listener {
-        public void configurationEntryUpdated(String key, String value) { }
-    }
-
     private ArrayList<Listener> listeners;
     private HashMap<String, ConfigurationEntry> entryMap;
-
     public ConfigurationManager(ConfigurationEntry[] entries) {
         this.listeners = new ArrayList<Listener>();
 
@@ -39,5 +34,10 @@ public class ConfigurationManager {
 
     public void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public static class Listener {
+        public void configurationEntryUpdated(String key, String value) {
+        }
     }
 }

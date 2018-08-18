@@ -14,7 +14,7 @@ public class RubiksClockScrambleParser implements ScrambleParser {
 
         ArrayList<String> moves = new ArrayList<String>();
 
-        for (;;) {
+        for (; ; ) {
             parser.skipSpaces();
 
             String move = "";
@@ -51,11 +51,11 @@ public class RubiksClockScrambleParser implements ScrambleParser {
 
             String wheel1 = parser.anyChar("ud");
             boolean isValidWheel1 =
-                wheel1 != null && (
-                wheel1.equals(pin1.toLowerCase()) ||
-                wheel1.equals(pin2.toLowerCase()) ||
-                wheel1.equals(pin3.toLowerCase()) ||
-                wheel1.equals(pin4.toLowerCase()));
+                    wheel1 != null && (
+                            wheel1.equals(pin1.toLowerCase()) ||
+                                    wheel1.equals(pin2.toLowerCase()) ||
+                                    wheel1.equals(pin3.toLowerCase()) ||
+                                    wheel1.equals(pin4.toLowerCase()));
             if (isValidWheel1) {
                 move += " " + wheel1;
 
@@ -92,12 +92,12 @@ public class RubiksClockScrambleParser implements ScrambleParser {
 
                     String wheel2 = parser.anyChar("ud");
                     boolean isValidWheel2 =
-                        wheel2 != null &&
-                        !wheel2.equals(wheel1) && (
-                        wheel2.equals(pin1.toLowerCase()) ||
-                        wheel2.equals(pin2.toLowerCase()) ||
-                        wheel2.equals(pin3.toLowerCase()) ||
-                        wheel2.equals(pin4.toLowerCase()));
+                            wheel2 != null &&
+                                    !wheel2.equals(wheel1) && (
+                                    wheel2.equals(pin1.toLowerCase()) ||
+                                            wheel2.equals(pin2.toLowerCase()) ||
+                                            wheel2.equals(pin3.toLowerCase()) ||
+                                            wheel2.equals(pin4.toLowerCase()));
                     if (isValidWheel2) {
                         move += wheel2;
                     } else {

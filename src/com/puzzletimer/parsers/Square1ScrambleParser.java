@@ -1,8 +1,8 @@
 package com.puzzletimer.parsers;
 
-import java.util.ArrayList;
-
 import com.puzzletimer.solvers.Square1ShapeSolver;
+
+import java.util.ArrayList;
 
 public class Square1ScrambleParser implements ScrambleParser {
     @Override
@@ -16,7 +16,7 @@ public class Square1ScrambleParser implements ScrambleParser {
 
         ArrayList<String> moves = new ArrayList<String>();
 
-        for (;;) {
+        for (; ; ) {
             parser.skipSpaces();
 
             // twist

@@ -1,45 +1,26 @@
 package com.puzzletimer.gui;
 
-import static com.puzzletimer.Internationalization.identifier;
-
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.text.DateFormat;
-import java.util.Date;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-
-import net.miginfocom.swing.MigLayout;
-
 import com.puzzletimer.models.Solution;
 import com.puzzletimer.models.Timing;
 import com.puzzletimer.util.SolutionUtils;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.DateFormat;
+import java.util.Date;
+
+import static com.puzzletimer.Internationalization.identifier;
 
 @SuppressWarnings("serial")
 public class SolutionEditingDialog extends JDialog {
-    public static class SolutionEditingDialogListener {
-        public void solutionEdited(Solution solution) {
-        }
-    }
-
     private JTextField textFieldStart;
     private JTextField textFieldTime;
     private JComboBox comboBoxPenalty;
     private JTextField textFieldScramble;
     private JButton buttonOk;
     private JButton buttonCancel;
-
     public SolutionEditingDialog(
             JFrame owner,
             boolean modal,
@@ -55,13 +36,13 @@ public class SolutionEditingDialog extends JDialog {
 
         // start
         DateFormat dateFormat =
-            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+                DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         this.textFieldStart.setText(
-            dateFormat.format(solution.getTiming().getStart()));
+                dateFormat.format(solution.getTiming().getStart()));
 
         // time
         this.textFieldTime.setText(
-            SolutionUtils.formatMinutes(solution.getTiming().getElapsedTime()));
+                SolutionUtils.formatMinutes(solution.getTiming().getElapsedTime()));
         this.addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
@@ -90,21 +71,21 @@ public class SolutionEditingDialog extends JDialog {
             public void actionPerformed(ActionEvent event) {
                 // timing
                 long time =
-                    SolutionUtils.parseTime(
-                        SolutionEditingDialog.this.textFieldTime.getText());
+                        SolutionUtils.parseTime(
+                                SolutionEditingDialog.this.textFieldTime.getText());
                 Timing timing =
-                    new Timing(
-                        solution.getTiming().getStart(),
-                        new Date(solution.getTiming().getStart().getTime() + time));
+                        new Timing(
+                                solution.getTiming().getStart(),
+                                new Date(solution.getTiming().getStart().getTime() + time));
 
                 // penalty
                 String penalty =
-                    (String) SolutionEditingDialog.this.comboBoxPenalty.getSelectedItem();
+                        (String) SolutionEditingDialog.this.comboBoxPenalty.getSelectedItem();
 
                 listener.solutionEdited(
-                    solution
-                        .setTiming(timing)
-                        .setPenalty(penalty));
+                        solution
+                                .setTiming(timing)
+                                .setPenalty(penalty));
 
                 SolutionEditingDialog.this.dispose();
             }
@@ -121,22 +102,22 @@ public class SolutionEditingDialog extends JDialog {
 
         // esc key closes window
         this.getRootPane().registerKeyboardAction(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    SolutionEditingDialog.this.dispose();
-                }
-            },
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        SolutionEditingDialog.this.dispose();
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void createComponents() {
         setLayout(
-            new MigLayout(
-                "fill, wrap",
-                "[pref!][fill]",
-                "[pref!]8[pref!]8[pref!]8[pref!]16[bottom]"));
+                new MigLayout(
+                        "fill, wrap",
+                        "[pref!][fill]",
+                        "[pref!]8[pref!]8[pref!]8[pref!]16[bottom]"));
 
         // labelStart
         add(new JLabel(identifier("solution_editing.start")));
@@ -177,5 +158,10 @@ public class SolutionEditingDialog extends JDialog {
         // buttonCancel
         this.buttonCancel = new JButton(identifier("solution_editing.cancel"));
         add(this.buttonCancel, "tag cancel");
+    }
+
+    public static class SolutionEditingDialogListener {
+        public void solutionEdited(Solution solution) {
+        }
     }
 }

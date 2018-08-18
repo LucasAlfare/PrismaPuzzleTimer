@@ -4,12 +4,20 @@ import java.util.ArrayList;
 
 public class Search {
 
+    static {
+        Shape.init();
+        Square.init();
+    }
+
     int[] move = new int[100];
     FullCube c = null;
     FullCube d = new FullCube("");
     int length1;
     int maxlen2;
     String sol_string;
+    int count = 0;
+    Square sq = new Square();
+    int[] pruncomb = new int[100];
 
     static int getNParity(int idx, int n) {
         int p = 0;
@@ -20,18 +28,13 @@ public class Search {
         return p & 1;
     }
 
-    static {
-        Shape.init();
-        Square.init();
-    }
-
     //para ser usado no Prisma
-    public String[] solutionAsArray(FullCube c){
+    public String[] solutionAsArray(FullCube c) {
         String s = solution(c);
         ArrayList<String> elements = new ArrayList<>();
         StringBuilder lastMove = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
-            if ((s.charAt(i) + "").matches("[\\D\\d]") && s.charAt(i) != '/'){
+            if ((s.charAt(i) + "").matches("[\\D\\d]") && s.charAt(i) != '/') {
                 lastMove.append(s.charAt(i));
             } else {
                 elements.add(lastMove.toString());
@@ -69,7 +72,6 @@ public class Search {
         }
         return sol_string;
     }
-
 
     boolean phase1Opt(int shape, int prunvalue, int maxl, int depth, int lm) {
         if (maxl == 0) {
@@ -205,9 +207,6 @@ public class Search {
         return false;
     }
 
-    int count = 0;
-    Square sq = new Square();
-
     boolean isSolvedInPhase1() {
         d.copy(c);
         for (int i = 0; i < length1; i++) {
@@ -243,8 +242,6 @@ public class Search {
 
         return false;
     }
-
-    int[] pruncomb = new int[100];
 
     String move2string(int len) {
         //TODO whether to invert the solution or not should be set by params.

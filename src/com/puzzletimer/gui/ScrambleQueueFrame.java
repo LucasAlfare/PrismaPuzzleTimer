@@ -1,40 +1,5 @@
 package com.puzzletimer.gui;
 
-import static com.puzzletimer.Internationalization.identifier;
-
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
-import net.miginfocom.swing.MigLayout;
-
 import com.puzzletimer.models.Category;
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.parsers.ScrambleParser;
@@ -43,6 +8,24 @@ import com.puzzletimer.scramblers.Scrambler;
 import com.puzzletimer.scramblers.ScramblerProvider;
 import com.puzzletimer.state.CategoryManager;
 import com.puzzletimer.state.ScrambleManager;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import static com.puzzletimer.Internationalization.identifier;
 
 @SuppressWarnings("serial")
 public class ScrambleQueueFrame extends JFrame {
@@ -75,15 +58,15 @@ public class ScrambleQueueFrame extends JFrame {
             public void categoriesUpdated(Category[] categories, Category currentCategory) {
                 // title
                 setTitle(
-                    String.format(
-                        identifier("scramble_queue.scramble_queue-category"),
-                        currentCategory.getDescription()));
+                        String.format(
+                                identifier("scramble_queue.scramble_queue-category"),
+                                currentCategory.getDescription()));
 
                 // scrambler combobox
                 ScrambleQueueFrame.this.comboBoxScrambler.removeAllItems();
 
                 Scrambler currentScrambler = scramblerProvider.get(
-                    categoryManager.getCurrentCategory().getScramblerId());
+                        categoryManager.getCurrentCategory().getScramblerId());
                 String puzzleId = currentScrambler.getScramblerInfo().getPuzzleId();
 
                 for (Scrambler scrambler : scramblerProvider.getAll()) {
@@ -106,12 +89,12 @@ public class ScrambleQueueFrame extends JFrame {
 
         // enable/disable buttons
         this.table.getSelectionModel().addListSelectionListener(
-            new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent event) {
-                    updateButtons(ScrambleQueueFrame.this.table);
-                }
-            });
+                new ListSelectionListener() {
+                    @Override
+                    public void valueChanged(ListSelectionEvent event) {
+                        updateButtons(ScrambleQueueFrame.this.table);
+                    }
+                });
 
         // up button
         this.buttonUp.addActionListener(new ActionListener() {
@@ -161,7 +144,7 @@ public class ScrambleQueueFrame extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 // remove scrambles
                 scrambleManager.removeScrambles(
-                    ScrambleQueueFrame.this.table.getSelectedRows());
+                        ScrambleQueueFrame.this.table.getSelectedRows());
 
                 // request focus
                 ScrambleQueueFrame.this.buttonRemove.requestFocusInWindow();
@@ -187,17 +170,17 @@ public class ScrambleQueueFrame extends JFrame {
                 Scramble[] scrambles;
                 try {
                     scrambles = loadScramblesFromFile(
-                        fileChooser.getSelectedFile(),
-                        puzzleId + "-IMPORTER",
-                        scrambleParser);
+                            fileChooser.getSelectedFile(),
+                            puzzleId + "-IMPORTER",
+                            scrambleParser);
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(
-                        ScrambleQueueFrame.this,
-                        String.format(
-                            identifier("scramble_queue.file_opening_error"),
-                            fileChooser.getSelectedFile().getAbsolutePath()),
-                        identifier("scramble_queue.error"),
-                        JOptionPane.ERROR_MESSAGE);
+                            ScrambleQueueFrame.this,
+                            String.format(
+                                    identifier("scramble_queue.file_opening_error"),
+                                    fileChooser.getSelectedFile().getAbsolutePath()),
+                            identifier("scramble_queue.error"),
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -232,16 +215,16 @@ public class ScrambleQueueFrame extends JFrame {
 
                 try {
                     saveScramblesToFile(
-                        selectedScrambles,
-                        fileChooser.getSelectedFile());
+                            selectedScrambles,
+                            fileChooser.getSelectedFile());
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(
-                        ScrambleQueueFrame.this,
-                        String.format(
-                            identifier("scramble_queue.file_opening_error"),
-                            fileChooser.getSelectedFile().getAbsolutePath()),
-                        identifier("scramble_queue.error"),
-                        JOptionPane.ERROR_MESSAGE);
+                            ScrambleQueueFrame.this,
+                            String.format(
+                                    identifier("scramble_queue.file_opening_error"),
+                                    fileChooser.getSelectedFile().getAbsolutePath()),
+                            identifier("scramble_queue.error"),
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -252,10 +235,10 @@ public class ScrambleQueueFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent event) {
                 Scrambler scrambler =
-                    (Scrambler) ScrambleQueueFrame.this.comboBoxScrambler.getSelectedItem();
+                        (Scrambler) ScrambleQueueFrame.this.comboBoxScrambler.getSelectedItem();
 
                 Scramble[] scrambles = new Scramble[
-                    (Integer) ScrambleQueueFrame.this.spinnerNumberOfScrambles.getValue()];
+                        (Integer) ScrambleQueueFrame.this.spinnerNumberOfScrambles.getValue()];
                 for (int i = 0; i < scrambles.length; i++) {
                     scrambles[i] = scrambler.getNextScramble();
                 }
@@ -275,22 +258,22 @@ public class ScrambleQueueFrame extends JFrame {
 
         // esc key closes window
         this.getRootPane().registerKeyboardAction(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    ScrambleQueueFrame.this.setVisible(false);
-                }
-            },
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        ScrambleQueueFrame.this.setVisible(false);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void createComponents() {
         setLayout(
-            new MigLayout(
-                "fill",
-                "[fill][pref!]",
-                "[pref!][]12[pref!][pref!]16[pref!]"));
+                new MigLayout(
+                        "fill",
+                        "[fill][pref!]",
+                        "[pref!][]12[pref!][pref!]16[pref!]"));
 
         // labelQueue
         add(new JLabel(identifier("scramble_queue.queue")), "span, wrap");
@@ -368,9 +351,9 @@ public class ScrambleQueueFrame extends JFrame {
         scrambleColumn.setPreferredWidth(1000);
 
         for (int i = 0; i < queue.length; i++) {
-            tableModel.addRow(new Object[] {
-                i + 1,
-                queue[i].getRawSequence(),
+            tableModel.addRow(new Object[]{
+                    i + 1,
+                    queue[i].getRawSequence(),
             });
         }
     }
@@ -381,13 +364,13 @@ public class ScrambleQueueFrame extends JFrame {
 
         // up button
         this.buttonUp.setEnabled(
-            selectedRows.length > 0 &&
-            selectedRows[0] != 0);
+                selectedRows.length > 0 &&
+                        selectedRows[0] != 0);
 
         // down button
         this.buttonDown.setEnabled(
-            selectedRows.length > 0 &&
-            selectedRows[selectedRows.length - 1] != nRows - 1);
+                selectedRows.length > 0 &&
+                        selectedRows[selectedRows.length - 1] != nRows - 1);
 
         // remove button
         this.buttonRemove.setEnabled(selectedRows.length > 0);
@@ -403,9 +386,9 @@ public class ScrambleQueueFrame extends JFrame {
         ArrayList<Scramble> scrambles = new ArrayList<Scramble>();
         while (scanner.hasNextLine()) {
             scrambles.add(
-                new Scramble(
-                    scramblerId,
-                    scrambleParser.parse(scanner.nextLine().trim())));
+                    new Scramble(
+                            scramblerId,
+                            scrambleParser.parse(scanner.nextLine().trim())));
         }
 
         scanner.close();

@@ -1,9 +1,15 @@
 package com.puzzletimer.gui;
 
-import static com.puzzletimer.Internationalization.identifier;
+import com.puzzletimer.models.Category;
+import com.puzzletimer.models.Solution;
+import com.puzzletimer.state.CategoryManager;
+import com.puzzletimer.state.SessionManager;
+import com.puzzletimer.statistics.*;
+import com.puzzletimer.util.SolutionUtils;
+import net.miginfocom.swing.MigLayout;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -12,29 +18,7 @@ import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.util.Date;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-
-import net.miginfocom.swing.MigLayout;
-
-import com.puzzletimer.models.Category;
-import com.puzzletimer.models.Solution;
-import com.puzzletimer.state.CategoryManager;
-import com.puzzletimer.state.SessionManager;
-import com.puzzletimer.statistics.Average;
-import com.puzzletimer.statistics.Best;
-import com.puzzletimer.statistics.BestAverage;
-import com.puzzletimer.statistics.Mean;
-import com.puzzletimer.statistics.Percentile;
-import com.puzzletimer.statistics.StandardDeviation;
-import com.puzzletimer.statistics.StatisticalMeasure;
-import com.puzzletimer.statistics.Worst;
-import com.puzzletimer.util.SolutionUtils;
+import static com.puzzletimer.Internationalization.identifier;
 
 @SuppressWarnings("serial")
 public class SessionSummaryFrame extends JFrame {
@@ -55,9 +39,9 @@ public class SessionSummaryFrame extends JFrame {
             @Override
             public void categoriesUpdated(Category[] categories, Category currentCategory) {
                 setTitle(
-                    String.format(
-                        identifier("session_summary.session_sumary_category"),
-                        currentCategory.getDescription()));
+                        String.format(
+                                identifier("session_summary.session_sumary_category"),
+                                currentCategory.getDescription()));
             }
         });
         categoryManager.notifyListeners();
@@ -75,9 +59,9 @@ public class SessionSummaryFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent event) {
                 StringSelection contents =
-                    new StringSelection(SessionSummaryFrame.this.textAreaSummary.getText());
+                        new StringSelection(SessionSummaryFrame.this.textAreaSummary.getText());
                 Clipboard clipboard =
-                    Toolkit.getDefaultToolkit().getSystemClipboard();
+                        Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(contents, contents);
             }
         });
@@ -93,22 +77,22 @@ public class SessionSummaryFrame extends JFrame {
 
         // esc key closes window
         this.getRootPane().registerKeyboardAction(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    SessionSummaryFrame.this.setVisible(false);
-                }
-            },
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        SessionSummaryFrame.this.setVisible(false);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void createComponents() {
         setLayout(
-            new MigLayout(
-                "fill",
-                "",
-                "[pref!][][pref!]16[pref!]"));
+                new MigLayout(
+                        "fill",
+                        "",
+                        "[pref!][][pref!]16[pref!]"));
 
         // labelSessionSummary
         add(new JLabel(identifier("session_summary.summary")), "wrap");
@@ -140,9 +124,9 @@ public class SessionSummaryFrame extends JFrame {
             Date end = solutions[0].getTiming().getEnd();
 
             DateFormat dateTimeFormat =
-                DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+                    DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
             DateFormat timeFormat =
-                DateFormat.getTimeInstance(DateFormat.MEDIUM);
+                    DateFormat.getTimeInstance(DateFormat.MEDIUM);
 
             summary.append(dateTimeFormat.format(start) + " - " + timeFormat.format(end));
             summary.append("\n");
@@ -151,21 +135,21 @@ public class SessionSummaryFrame extends JFrame {
 
             // statistics
             String[] labels = {
-                identifier("session_summary.mean"),
-                identifier("session_summary.average"),
-                identifier("session_summary.best_time"),
-                identifier("session_summary.median"),
-                identifier("session_summary.worst_time"),
-                identifier("session_summary.standard_deviation"),
+                    identifier("session_summary.mean"),
+                    identifier("session_summary.average"),
+                    identifier("session_summary.best_time"),
+                    identifier("session_summary.median"),
+                    identifier("session_summary.worst_time"),
+                    identifier("session_summary.standard_deviation"),
             };
 
             StatisticalMeasure[] statistics = {
-                new Mean(1, Integer.MAX_VALUE),
-                new Average(3, Integer.MAX_VALUE),
-                new Best(1, Integer.MAX_VALUE),
-                new Percentile(1, Integer.MAX_VALUE, 0.5),
-                new Worst(1, Integer.MAX_VALUE),
-                new StandardDeviation(1, Integer.MAX_VALUE),
+                    new Mean(1, Integer.MAX_VALUE),
+                    new Average(3, Integer.MAX_VALUE),
+                    new Best(1, Integer.MAX_VALUE),
+                    new Percentile(1, Integer.MAX_VALUE, 0.5),
+                    new Worst(1, Integer.MAX_VALUE),
+                    new StandardDeviation(1, Integer.MAX_VALUE),
             };
 
             int maxLabelLength = 0;
@@ -195,9 +179,9 @@ public class SessionSummaryFrame extends JFrame {
                 }
 
                 summary.append(String.format(
-                    "%-" + maxLabelLength + "s %" + maxStringLength + "s",
-                    labels[i],
-                    SolutionUtils.format(statistics[i].getValue())));
+                        "%-" + maxLabelLength + "s %" + maxStringLength + "s",
+                        labels[i],
+                        SolutionUtils.format(statistics[i].getValue())));
                 summary.append("\n");
             }
 
@@ -206,13 +190,13 @@ public class SessionSummaryFrame extends JFrame {
 
         // best average of X
         String[] labels = {
-            identifier("session_summary.best_average_of_5"),
-            identifier("session_summary.best_average_of_12"),
+                identifier("session_summary.best_average_of_5"),
+                identifier("session_summary.best_average_of_12"),
         };
 
         StatisticalMeasure[] statistics = {
-            new BestAverage(5, Integer.MAX_VALUE),
-            new BestAverage(12, Integer.MAX_VALUE),
+                new BestAverage(5, Integer.MAX_VALUE),
+                new BestAverage(12, Integer.MAX_VALUE),
         };
 
         for (int i = 0; i < statistics.length; i++) {
@@ -228,9 +212,9 @@ public class SessionSummaryFrame extends JFrame {
 
                 // index range
                 summary.append(String.format(
-                    "  %d-%d - ",
-                    solutions.length - windowPosition - windowSize + 1,
-                    solutions.length - windowPosition));
+                        "  %d-%d - ",
+                        solutions.length - windowPosition - windowSize + 1,
+                        solutions.length - windowPosition));
 
                 // find indices of best and worst times
                 int indexBest = 0;

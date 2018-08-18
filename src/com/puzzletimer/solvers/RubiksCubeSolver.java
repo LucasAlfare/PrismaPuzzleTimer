@@ -8,92 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RubiksCubeSolver {
-    public static class State {
-        public byte[] cornersPermutation;
-        public byte[] cornersOrientation;
-        public byte[] edgesPermutation;
-        public byte[] edgesOrientation;
-
-        public State(byte[] cornersPermutation, byte[] cornersOrientation, byte[] edgesPermutation, byte[] edgesOrientation) {
-            this.cornersPermutation = cornersPermutation;
-            this.cornersOrientation = cornersOrientation;
-            this.edgesPermutation = edgesPermutation;
-            this.edgesOrientation = edgesOrientation;
-        }
-
-        public State multiply(State move) {
-            // corners
-            byte[] cornersPermutation = new byte[8];
-            byte[] cornersOrientation = new byte[8];
-
-            for (int i = 0; i < 8; i++) {
-                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
-                cornersOrientation[i] = (byte) ((this.cornersOrientation[move.cornersPermutation[i]] + move.cornersOrientation[i]) % 3);
-            }
-
-            // edges
-            byte[] edgesPermutation = new byte[12];
-            byte[] edgesOrientation = new byte[12];
-
-            for (int i = 0; i < 12; i++) {
-                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
-                edgesOrientation[i] = (byte) ((this.edgesOrientation[move.edgesPermutation[i]] + move.edgesOrientation[i]) % 2);
-            }
-
-            return new State(cornersPermutation, cornersOrientation, edgesPermutation, edgesOrientation);
-        }
-
-        public State applySequence(String[] sequence) {
-            State state = this;
-            for (String move : sequence) {
-                state = state.multiply(moves.get(move));
-            }
-
-            return state;
-        }
-
-        public static HashMap<String, State> moves;
-
-        static {
-            State moveU = new State(new byte[] { 3, 0, 1, 2, 4, 5, 6, 7 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 0, 1, 2, 3, 7, 4, 5, 6, 8, 9, 10, 11 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-            State moveD = new State(new byte[] { 0, 1, 2, 3, 5, 6, 7, 4 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 8 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-            State moveL = new State(new byte[] { 4, 1, 2, 0, 7, 5, 6, 3 }, new byte[] { 2, 0, 0, 1, 1, 0, 0, 2 }, new byte[] { 11, 1, 2, 7, 4, 5, 6, 0, 8, 9, 10, 3 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-            State moveR = new State(new byte[] { 0, 2, 6, 3, 4, 1, 5, 7 }, new byte[] { 0, 1, 2, 0, 0, 2, 1, 0 }, new byte[] { 0, 5, 9, 3, 4, 2, 6, 7, 8, 1, 10, 11 }, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-            State moveF = new State(new byte[] { 0, 1, 3, 7, 4, 5, 2, 6 }, new byte[] { 0, 0, 1, 2, 0, 0, 2, 1 }, new byte[] { 0, 1, 6, 10, 4, 5, 3, 7, 8, 9, 2, 11 }, new byte[] { 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0 });
-            State moveB = new State(new byte[] { 1, 5, 2, 3, 0, 4, 6, 7 }, new byte[] { 1, 2, 0, 0, 2, 1, 0, 0 }, new byte[] { 4, 8, 2, 3, 1, 5, 6, 7, 0, 9, 10, 11 }, new byte[] { 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 });
-
-            moves = new HashMap<String, State>();
-            moves.put("U",  moveU);
-            moves.put("U2", moveU.multiply(moveU));
-            moves.put("U'", moveU.multiply(moveU).multiply(moveU));
-            moves.put("D",  moveD);
-            moves.put("D2", moveD.multiply(moveD));
-            moves.put("D'", moveD.multiply(moveD).multiply(moveD));
-            moves.put("L",  moveL);
-            moves.put("L2", moveL.multiply(moveL));
-            moves.put("L'", moveL.multiply(moveL).multiply(moveL));
-            moves.put("R",  moveR);
-            moves.put("R2", moveR.multiply(moveR));
-            moves.put("R'", moveR.multiply(moveR).multiply(moveR));
-            moves.put("F",  moveF);
-            moves.put("F2", moveF.multiply(moveF));
-            moves.put("F'", moveF.multiply(moveF).multiply(moveF));
-            moves.put("B",  moveB);
-            moves.put("B2", moveB.multiply(moveB));
-            moves.put("B'", moveB.multiply(moveB).multiply(moveB));
-        }
-
-        public static State id;
-
-        static {
-            id = new State(
-                IndexMapping.indexToPermutation(0, 8),
-                IndexMapping.indexToOrientation(0, 3, 8),
-                IndexMapping.indexToPermutation(0, 12),
-                IndexMapping.indexToOrientation(0, 2, 12));
-        }
-    }
-
     // constants
     public static final int N_CORNERS_ORIENTATIONS = 2187;
     public static final int N_EDGES_ORIENTATIONS = 2048;
@@ -102,7 +16,6 @@ public class RubiksCubeSolver {
     public static final int N_U_D_EDGES_PERMUTATIONS = 40320;
     public static final int N_E_EDGES_PERMUTATIONS = 24;
     public static final int N_EDGES_PERMUTATIONS = 479001600;
-
     // moves
     private static String[] moveNames1;
     private static State[] moves1;
@@ -112,75 +25,6 @@ public class RubiksCubeSolver {
     private static State[] moves2;
     private static int[] sides2;
     private static int[] axes2;
-
-    static {
-        // phase 1
-        moveNames1 = new String[] {
-            "U", "U2", "U'",
-            "D", "D2", "D'",
-            "L", "L2", "L'",
-            "R", "R2", "R'",
-            "F", "F2", "F'",
-            "B", "B2", "B'",
-        };
-
-        moves1 = new State[moveNames1.length];
-        for (int i = 0; i < moves1.length; i++) {
-            moves1[i] = State.moves.get(moveNames1[i]);
-        }
-
-        sides1 = new int[] {
-            0, 0, 0,
-            1, 1, 1,
-            2, 2, 2,
-            3, 3, 3,
-            4, 4, 4,
-            5, 5, 5,
-        };
-
-        axes1 = new int[] {
-            0, 0, 0,
-            0, 0, 0,
-            1, 1, 1,
-            1, 1, 1,
-            2, 2, 2,
-            2, 2, 2,
-        };
-
-        // phase 2
-        moveNames2 = new String[] {
-            "U", "U2", "U'",
-            "D", "D2", "D'",
-            "L2",
-            "R2",
-            "F2",
-            "B2",
-        };
-
-        moves2 = new State[moveNames2.length];
-        for (int i = 0; i < moves2.length; i++) {
-            moves2[i] = State.moves.get(moveNames2[i]);
-        }
-
-        sides2 = new int[] {
-            0, 0, 0,
-            1, 1, 1,
-            2,
-            3,
-            4,
-            5,
-        };
-
-        axes2 = new int[] {
-            0, 0, 0,
-            0, 0, 0,
-            1,
-            1,
-            2,
-            2,
-        };
-    }
-
     // move tables
     private static int[][] cornersOrientationMove;
     private static int[][] edgesOrientationMove;
@@ -188,6 +32,85 @@ public class RubiksCubeSolver {
     private static int[][] cornersPermutationMove;
     private static int[][] uDEdgesPermutationMove;
     private static int[][] eEdgesPermutationMove;
+    // prune tables
+    private static byte[][] cornersOrientationDistance;
+    private static byte[][] edgesOrientationDistance;
+    private static byte[][] cornersPermutationDistance;
+    private static byte[][] uDEdgesPermutationDistance;
+    // search
+    private static int MAX_SOLUTION_LENGTH = 23;
+    private static int MAX_PHASE_2_SOLUTION_LENGTH = 12;
+    private static State initialState;
+    private static ArrayList<Integer> solution1;
+    private static ArrayList<Integer> solution2;
+
+    static {
+        // phase 1
+        moveNames1 = new String[]{
+                "U", "U2", "U'",
+                "D", "D2", "D'",
+                "L", "L2", "L'",
+                "R", "R2", "R'",
+                "F", "F2", "F'",
+                "B", "B2", "B'",
+        };
+
+        moves1 = new State[moveNames1.length];
+        for (int i = 0; i < moves1.length; i++) {
+            moves1[i] = State.moves.get(moveNames1[i]);
+        }
+
+        sides1 = new int[]{
+                0, 0, 0,
+                1, 1, 1,
+                2, 2, 2,
+                3, 3, 3,
+                4, 4, 4,
+                5, 5, 5,
+        };
+
+        axes1 = new int[]{
+                0, 0, 0,
+                0, 0, 0,
+                1, 1, 1,
+                1, 1, 1,
+                2, 2, 2,
+                2, 2, 2,
+        };
+
+        // phase 2
+        moveNames2 = new String[]{
+                "U", "U2", "U'",
+                "D", "D2", "D'",
+                "L2",
+                "R2",
+                "F2",
+                "B2",
+        };
+
+        moves2 = new State[moveNames2.length];
+        for (int i = 0; i < moves2.length; i++) {
+            moves2[i] = State.moves.get(moveNames2[i]);
+        }
+
+        sides2 = new int[]{
+                0, 0, 0,
+                1, 1, 1,
+                2,
+                3,
+                4,
+                5,
+        };
+
+        axes2 = new int[]{
+                0, 0, 0,
+                0, 0, 0,
+                1,
+                1,
+                2,
+                2,
+        };
+    }
 
     static {
         // phase 1
@@ -294,12 +217,6 @@ public class RubiksCubeSolver {
             }
         }
     }
-
-    // prune tables
-    private static byte[][] cornersOrientationDistance;
-    private static byte[][] edgesOrientationDistance;
-    private static byte[][] cornersPermutationDistance;
-    private static byte[][] uDEdgesPermutationDistance;
 
     static {
         // phase 1
@@ -420,14 +337,6 @@ public class RubiksCubeSolver {
         }
     }
 
-    // search
-    private static int MAX_SOLUTION_LENGTH = 23;
-    private static int MAX_PHASE_2_SOLUTION_LENGTH = 12;
-
-    private static State initialState;
-    private static ArrayList<Integer> solution1;
-    private static ArrayList<Integer> solution2;
-
     private static String[] solution(State state) {
         initialState = state;
 
@@ -478,8 +387,8 @@ public class RubiksCubeSolver {
         }
 
         if (cornersOrientationDistance[cornersOrientation][eEdgesCombinations] <= depth &&
-            edgesOrientationDistance[edgesOrientation][eEdgesCombinations] <= depth) {
-            int[] lastMoves = { -1, -1 };
+                edgesOrientationDistance[edgesOrientation][eEdgesCombinations] <= depth) {
+            int[] lastMoves = {-1, -1};
             for (int i = 0; i < lastMoves.length && i < solution1.size(); i++) {
                 lastMoves[i] = solution1.get(solution1.size() - 1 - i);
             }
@@ -492,15 +401,15 @@ public class RubiksCubeSolver {
 
                 // same axis three times in a row
                 if (lastMoves[0] >= 0 && axes1[i] == axes1[lastMoves[0]] &&
-                    lastMoves[1] >= 0 && axes1[i] == axes1[lastMoves[1]]) {
+                        lastMoves[1] >= 0 && axes1[i] == axes1[lastMoves[1]]) {
                     continue;
                 }
 
                 solution1.add(i);
                 if (search1(cornersOrientationMove[cornersOrientation][i],
-                            edgesOrientationMove[edgesOrientation][i],
-                            eEdgesCombinationMove[eEdgesCombinations][i],
-                            depth - 1)) {
+                        edgesOrientationMove[edgesOrientation][i],
+                        eEdgesCombinationMove[eEdgesCombinations][i],
+                        depth - 1)) {
                     return true;
                 }
                 solution1.remove(solution1.size() - 1);
@@ -553,7 +462,7 @@ public class RubiksCubeSolver {
         }
 
         if (cornersPermutationDistance[cornersPermutation][eEdgesPermutation] <= depth &&
-            uDEdgesPermutationDistance[uDEdgesPermutation][eEdgesPermutation] <= depth) {
+                uDEdgesPermutationDistance[uDEdgesPermutation][eEdgesPermutation] <= depth) {
             int lastSide = Integer.MAX_VALUE;
             if (solution2.size() > 0) {
                 lastSide = sides2[solution2.get(solution2.size() - 1)];
@@ -579,9 +488,9 @@ public class RubiksCubeSolver {
 
                 solution2.add(i);
                 if (search2(cornersPermutationMove[cornersPermutation][i],
-                            uDEdgesPermutationMove[uDEdgesPermutation][i],
-                            eEdgesPermutationMove[eEdgesPermutation][i],
-                            depth - 1)) {
+                        uDEdgesPermutationMove[uDEdgesPermutation][i],
+                        eEdgesPermutationMove[eEdgesPermutation][i],
+                        depth - 1)) {
                     return true;
                 }
                 solution2.remove(solution2.size() - 1);
@@ -595,22 +504,22 @@ public class RubiksCubeSolver {
         String[] solution = solution(state);
 
         HashMap<String, String> inverseMoveNames = new HashMap<String, String>();
-        inverseMoveNames.put("U",  "U'");
+        inverseMoveNames.put("U", "U'");
         inverseMoveNames.put("U2", "U2");
         inverseMoveNames.put("U'", "U");
-        inverseMoveNames.put("D",  "D'");
+        inverseMoveNames.put("D", "D'");
         inverseMoveNames.put("D2", "D2");
         inverseMoveNames.put("D'", "D");
-        inverseMoveNames.put("L",  "L'");
+        inverseMoveNames.put("L", "L'");
         inverseMoveNames.put("L2", "L2");
         inverseMoveNames.put("L'", "L");
-        inverseMoveNames.put("R",  "R'");
+        inverseMoveNames.put("R", "R'");
         inverseMoveNames.put("R2", "R2");
         inverseMoveNames.put("R'", "R");
-        inverseMoveNames.put("F",  "F'");
+        inverseMoveNames.put("F", "F'");
         inverseMoveNames.put("F2", "F2");
         inverseMoveNames.put("F'", "F");
-        inverseMoveNames.put("B",  "B'");
+        inverseMoveNames.put("B", "B'");
         inverseMoveNames.put("B2", "B2");
         inverseMoveNames.put("B'", "B");
 
@@ -620,5 +529,90 @@ public class RubiksCubeSolver {
         }
 
         return sequence;
+    }
+
+    public static class State {
+        public static HashMap<String, State> moves;
+        public static State id;
+
+        static {
+            State moveU = new State(new byte[]{3, 0, 1, 2, 4, 5, 6, 7}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{0, 1, 2, 3, 7, 4, 5, 6, 8, 9, 10, 11}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            State moveD = new State(new byte[]{0, 1, 2, 3, 5, 6, 7, 4}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0}, new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 8}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            State moveL = new State(new byte[]{4, 1, 2, 0, 7, 5, 6, 3}, new byte[]{2, 0, 0, 1, 1, 0, 0, 2}, new byte[]{11, 1, 2, 7, 4, 5, 6, 0, 8, 9, 10, 3}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            State moveR = new State(new byte[]{0, 2, 6, 3, 4, 1, 5, 7}, new byte[]{0, 1, 2, 0, 0, 2, 1, 0}, new byte[]{0, 5, 9, 3, 4, 2, 6, 7, 8, 1, 10, 11}, new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            State moveF = new State(new byte[]{0, 1, 3, 7, 4, 5, 2, 6}, new byte[]{0, 0, 1, 2, 0, 0, 2, 1}, new byte[]{0, 1, 6, 10, 4, 5, 3, 7, 8, 9, 2, 11}, new byte[]{0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0});
+            State moveB = new State(new byte[]{1, 5, 2, 3, 0, 4, 6, 7}, new byte[]{1, 2, 0, 0, 2, 1, 0, 0}, new byte[]{4, 8, 2, 3, 1, 5, 6, 7, 0, 9, 10, 11}, new byte[]{1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0});
+
+            moves = new HashMap<String, State>();
+            moves.put("U", moveU);
+            moves.put("U2", moveU.multiply(moveU));
+            moves.put("U'", moveU.multiply(moveU).multiply(moveU));
+            moves.put("D", moveD);
+            moves.put("D2", moveD.multiply(moveD));
+            moves.put("D'", moveD.multiply(moveD).multiply(moveD));
+            moves.put("L", moveL);
+            moves.put("L2", moveL.multiply(moveL));
+            moves.put("L'", moveL.multiply(moveL).multiply(moveL));
+            moves.put("R", moveR);
+            moves.put("R2", moveR.multiply(moveR));
+            moves.put("R'", moveR.multiply(moveR).multiply(moveR));
+            moves.put("F", moveF);
+            moves.put("F2", moveF.multiply(moveF));
+            moves.put("F'", moveF.multiply(moveF).multiply(moveF));
+            moves.put("B", moveB);
+            moves.put("B2", moveB.multiply(moveB));
+            moves.put("B'", moveB.multiply(moveB).multiply(moveB));
+        }
+
+        static {
+            id = new State(
+                    IndexMapping.indexToPermutation(0, 8),
+                    IndexMapping.indexToOrientation(0, 3, 8),
+                    IndexMapping.indexToPermutation(0, 12),
+                    IndexMapping.indexToOrientation(0, 2, 12));
+        }
+
+        public byte[] cornersPermutation;
+        public byte[] cornersOrientation;
+        public byte[] edgesPermutation;
+        public byte[] edgesOrientation;
+
+        public State(byte[] cornersPermutation, byte[] cornersOrientation, byte[] edgesPermutation, byte[] edgesOrientation) {
+            this.cornersPermutation = cornersPermutation;
+            this.cornersOrientation = cornersOrientation;
+            this.edgesPermutation = edgesPermutation;
+            this.edgesOrientation = edgesOrientation;
+        }
+
+        public State multiply(State move) {
+            // corners
+            byte[] cornersPermutation = new byte[8];
+            byte[] cornersOrientation = new byte[8];
+
+            for (int i = 0; i < 8; i++) {
+                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
+                cornersOrientation[i] = (byte) ((this.cornersOrientation[move.cornersPermutation[i]] + move.cornersOrientation[i]) % 3);
+            }
+
+            // edges
+            byte[] edgesPermutation = new byte[12];
+            byte[] edgesOrientation = new byte[12];
+
+            for (int i = 0; i < 12; i++) {
+                edgesPermutation[i] = this.edgesPermutation[move.edgesPermutation[i]];
+                edgesOrientation[i] = (byte) ((this.edgesOrientation[move.edgesPermutation[i]] + move.edgesOrientation[i]) % 2);
+            }
+
+            return new State(cornersPermutation, cornersOrientation, edgesPermutation, edgesOrientation);
+        }
+
+        public State applySequence(String[] sequence) {
+            State state = this;
+            for (String move : sequence) {
+                state = state.multiply(moves.get(move));
+            }
+
+            return state;
+        }
     }
 }

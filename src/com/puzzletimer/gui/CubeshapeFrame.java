@@ -6,21 +6,19 @@ import net.miginfocom.layout.CC;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CubeshapeFrame extends JFrame {
 
+    private static String templateColagem;
     private JComboBox<String> cubeShapes;
     private JScrollPane scrollPane;
     private JList<String> adicionados;
     private JButton adicionar, remover, limpar, adicionarDaColagem, gerarColagem;
-
     private FrameAuxiliar frameAuxiliar;
-    private static String templateColagem;
 
-    public CubeshapeFrame(){
+    public CubeshapeFrame() {
         setSize(300, 400);
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setTitle("Assistente de Cubeshape");
@@ -41,8 +39,8 @@ public class CubeshapeFrame extends JFrame {
 
         adicionar = new JButton("adicionar");
         adicionar.addActionListener(e -> {
-            if (cubeShapes.getSelectedIndex() != -1){
-                if (!Main.shapes.contains(CubeShapeIndex.values()[cubeShapes.getSelectedIndex()])){
+            if (cubeShapes.getSelectedIndex() != -1) {
+                if (!Main.shapes.contains(CubeShapeIndex.values()[cubeShapes.getSelectedIndex()])) {
                     Main.shapes.add(CubeShapeIndex.values()[cubeShapes.getSelectedIndex()]);
                     adicionados.setModel(atualizado());
                     System.out.println(Main.shapes);
@@ -53,9 +51,9 @@ public class CubeshapeFrame extends JFrame {
         remover = new JButton("remover selecionado");
         remover.addActionListener(e -> {
             int indice = adicionados.getSelectedIndex();
-            if (indice != -1){
-                for (CubeShapeIndex ns : CubeShapeIndex.values()){
-                    if (ns.toString().equals(adicionados.getSelectedValue())){
+            if (indice != -1) {
+                for (CubeShapeIndex ns : CubeShapeIndex.values()) {
+                    if (ns.toString().equals(adicionados.getSelectedValue())) {
                         Main.shapes.remove(ns);
                         adicionados.setModel(atualizado());
                         break;
@@ -102,40 +100,6 @@ public class CubeshapeFrame extends JFrame {
         pack();
     }
 
-    private String[] nomeDosCasos(){
-        CubeShapeIndex[] shapes = CubeShapeIndex.values();
-        String[] nomes = new String[shapes.length];
-        for (int i = 0; i < shapes.length; i++) {
-            nomes[i] = shapes[i].toString();
-        }
-
-        return nomes;
-    }
-
-    private AbstractListModel<String> atualizado(){
-        String[] aux;
-        if (Main.shapes.isEmpty()){
-            aux = new String[]{"sem shapes ainda!"};
-        } else {
-            aux = new String[Main.shapes.size()];
-            for (int i = 0; i < Main.shapes.size(); i++) {
-                aux[i] = Main.shapes.get(i).toString();
-            }
-        }
-
-        return new AbstractListModel<String>() {
-            @Override
-            public int getSize() {
-                return aux.length;
-            }
-
-            @Override
-            public String getElementAt(int index) {
-                return aux[index];
-            }
-        };
-    }
-
     /*
     x8_star;
     x222_perpendicular;
@@ -148,7 +112,7 @@ public class CubeshapeFrame extends JFrame {
     x33_paired;
     x33_perpendicular;
      */
-    private static ArrayList<CubeShapeIndex> templateParaLista(String template){
+    private static ArrayList<CubeShapeIndex> templateParaLista(String template) {
         ArrayList<String> separados = new ArrayList<>(
                 Arrays.asList(
                         template
@@ -170,12 +134,46 @@ public class CubeshapeFrame extends JFrame {
         return ret;
     }
 
-    private static String listaParaTemplate(ArrayList<CubeShapeIndex> lista){
+    private static String listaParaTemplate(ArrayList<CubeShapeIndex> lista) {
         StringBuilder ret = new StringBuilder();
-        for (CubeShapeIndex s : lista){
+        for (CubeShapeIndex s : lista) {
             ret.append(s).append(";\n");
         }
         return ret.toString();
+    }
+
+    private String[] nomeDosCasos() {
+        CubeShapeIndex[] shapes = CubeShapeIndex.values();
+        String[] nomes = new String[shapes.length];
+        for (int i = 0; i < shapes.length; i++) {
+            nomes[i] = shapes[i].toString();
+        }
+
+        return nomes;
+    }
+
+    private AbstractListModel<String> atualizado() {
+        String[] aux;
+        if (Main.shapes.isEmpty()) {
+            aux = new String[]{"sem shapes ainda!"};
+        } else {
+            aux = new String[Main.shapes.size()];
+            for (int i = 0; i < Main.shapes.size(); i++) {
+                aux[i] = Main.shapes.get(i).toString();
+            }
+        }
+
+        return new AbstractListModel<String>() {
+            @Override
+            public int getSize() {
+                return aux.length;
+            }
+
+            @Override
+            public String getElementAt(int index) {
+                return aux[index];
+            }
+        };
     }
 
     private class FrameAuxiliar extends JFrame {
@@ -185,7 +183,7 @@ public class CubeshapeFrame extends JFrame {
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JButton salvar;
 
-        public FrameAuxiliar(){
+        public FrameAuxiliar() {
             this.setSize(400, 400);
             this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             this.setIconImage(CubeshapeFrame.this.getIconImage());
@@ -194,20 +192,17 @@ public class CubeshapeFrame extends JFrame {
             //iniciar(null, true);
         }
 
-        public void iniciar(String conteudo, boolean adicionando){
+        public void iniciar(String conteudo, boolean adicionando) {
             jScrollPane1 = new JScrollPane();
             salvar = new JButton("salvar");
 
             heading = new JLabel(adicionando ? "cole os nomeDosCasos aqui:" : "copie e salve sua colagem");
             heading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            heading.setText("texto");
 
             area = new JTextArea(adicionando ? "vazio" : conteudo);
             area.setColumns(20);
             area.setRows(5);
             jScrollPane1.setViewportView(area);
-
-            salvar.setText("jButton1");
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
@@ -232,9 +227,9 @@ public class CubeshapeFrame extends JFrame {
                                     .addComponent(salvar))
             );
 
-            if (adicionando){
+            if (adicionando) {
                 salvar.addActionListener(e -> {
-                    if (!area.getText().isEmpty()){
+                    if (!area.getText().isEmpty()) {
                         templateColagem = area.getText();
 
                         Main.shapes = null;
@@ -253,48 +248,6 @@ public class CubeshapeFrame extends JFrame {
             }
 
             pack();
-
-            /*
-            getContentPane().removeAll();
-            JTextArea area = new JTextArea(adicionando ? "vazio" : conteudo);
-
-            this.add(
-                    new JLabel(adicionando ? "cole os nomeDosCasos aqui:" : "copie e salve sua colagem"),
-                    new CC().wrap()
-            );
-
-            area.setPreferredSize(new Dimension(200, 100));
-            area.setLineWrap( true );
-            area.setWrapStyleWord( true );
-            area.setColumns(20);
-            area.setRows(5);
-            JScrollPane pane = new JScrollPane(area);
-
-            this.add(pane, new CC().span());
-
-            if (adicionando){
-                JButton salvar = new JButton("salvar");
-                salvar.addActionListener(e -> {
-                    if (!area.getText().isEmpty()){
-                        templateColagem = area.getText();
-
-                        Main.shapes = null;
-                        Main.shapes = templateParaLista(templateColagem);
-                        System.out.println();
-                        System.out.println("template: " + templateColagem);
-                        System.out.println("tamanho após paste: " + Main.shapes.size());
-                        adicionados.setModel(atualizado());
-                        templateColagem = "";
-
-                        FrameAuxiliar.this.setVisible(false);
-                    }
-                });
-
-                this.add(salvar, "align center bottom");
-            }
-
-            this.pack();
-             */
         }
     }
 }

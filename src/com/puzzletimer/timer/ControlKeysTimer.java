@@ -1,25 +1,16 @@
 package com.puzzletimer.timer;
 
+import com.puzzletimer.models.Timing;
+import com.puzzletimer.state.TimerManager;
+
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
 import java.util.TimerTask;
 
-import javax.swing.JFrame;
-
-import com.puzzletimer.models.Timing;
-import com.puzzletimer.state.TimerManager;
-
 public class ControlKeysTimer implements Timer {
-    private enum State {
-        READY_FOR_INSPECTION,
-        NOT_READY,
-        READY,
-        RUNNING,
-        FINISHED,
-    }
-
     private JFrame frame;
     private TimerManager timerManager;
     private boolean inspectionEnabled;
@@ -31,7 +22,6 @@ public class ControlKeysTimer implements Timer {
     private Date start;
     private Date finish;
     private State state;
-
     public ControlKeysTimer(JFrame frame, TimerManager timerManager) {
         this.frame = frame;
         this.timerManager = timerManager;
@@ -42,7 +32,7 @@ public class ControlKeysTimer implements Timer {
         this.start = null;
         this.finish = new Date(0);
         this.state = ControlKeysTimer.this.inspectionEnabled ?
-            State.READY_FOR_INSPECTION : State.NOT_READY;
+                State.READY_FOR_INSPECTION : State.NOT_READY;
     }
 
     @Override
@@ -117,7 +107,7 @@ public class ControlKeysTimer implements Timer {
                             ControlKeysTimer.this.repeater.cancel();
 
                             ControlKeysTimer.this.timerManager.finishSolution(
-                                new Timing(ControlKeysTimer.this.start, ControlKeysTimer.this.finish));
+                                    new Timing(ControlKeysTimer.this.start, ControlKeysTimer.this.finish));
 
                             ControlKeysTimer.this.state = State.FINISHED;
                         }
@@ -157,7 +147,7 @@ public class ControlKeysTimer implements Timer {
                             @Override
                             public void run() {
                                 ControlKeysTimer.this.timerManager.updateSolutionTiming(
-                                    new Timing(ControlKeysTimer.this.start, new Date()));
+                                        new Timing(ControlKeysTimer.this.start, new Date()));
                             }
                         }, 0, 5);
 
@@ -167,7 +157,7 @@ public class ControlKeysTimer implements Timer {
                     case FINISHED:
                         if (!ControlKeysTimer.this.leftPressed && !ControlKeysTimer.this.rightPressed) {
                             ControlKeysTimer.this.state = ControlKeysTimer.this.inspectionEnabled ?
-                                State.READY_FOR_INSPECTION : State.NOT_READY;
+                                    State.READY_FOR_INSPECTION : State.NOT_READY;
                         }
                         break;
                 }
@@ -179,7 +169,7 @@ public class ControlKeysTimer implements Timer {
             @Override
             public void inspectionFinished() {
                 ControlKeysTimer.this.state = ControlKeysTimer.this.inspectionEnabled ?
-                    State.READY_FOR_INSPECTION : State.NOT_READY;
+                        State.READY_FOR_INSPECTION : State.NOT_READY;
             }
         };
         this.timerManager.addListener(this.timerListener);
@@ -193,5 +183,13 @@ public class ControlKeysTimer implements Timer {
 
         this.frame.removeKeyListener(this.keyListener);
         this.timerManager.removeListener(this.timerListener);
+    }
+
+    private enum State {
+        READY_FOR_INSPECTION,
+        NOT_READY,
+        READY,
+        RUNNING,
+        FINISHED,
     }
 }

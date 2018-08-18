@@ -1,24 +1,16 @@
 package com.puzzletimer.timer;
 
+import com.puzzletimer.models.Timing;
+import com.puzzletimer.state.TimerManager;
+
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
 import java.util.TimerTask;
 
-import javax.swing.JFrame;
-
-import com.puzzletimer.models.Timing;
-import com.puzzletimer.state.TimerManager;
-
 public class SpaceKeyTimer implements Timer {
-    private enum State {
-        READY_FOR_INSPECTION,
-        READY,
-        RUNNING,
-        FINISHED,
-    }
-
     private JFrame frame;
     private TimerManager timerManager;
     private boolean inspectionEnabled;
@@ -28,7 +20,6 @@ public class SpaceKeyTimer implements Timer {
     private Date start;
     private Date finish;
     private State state;
-
     public SpaceKeyTimer(JFrame frame, TimerManager timerManager) {
         this.frame = frame;
         this.timerManager = timerManager;
@@ -37,7 +28,7 @@ public class SpaceKeyTimer implements Timer {
         this.start = null;
         this.finish = new Date(0);
         this.state = this.inspectionEnabled ?
-            State.READY_FOR_INSPECTION : State.READY;
+                State.READY_FOR_INSPECTION : State.READY;
     }
 
     @Override
@@ -83,7 +74,7 @@ public class SpaceKeyTimer implements Timer {
                         SpaceKeyTimer.this.repeater.cancel();
 
                         SpaceKeyTimer.this.timerManager.finishSolution(
-                            new Timing(SpaceKeyTimer.this.start, SpaceKeyTimer.this.finish));
+                                new Timing(SpaceKeyTimer.this.start, SpaceKeyTimer.this.finish));
 
                         SpaceKeyTimer.this.state = State.FINISHED;
                         break;
@@ -123,7 +114,7 @@ public class SpaceKeyTimer implements Timer {
                             @Override
                             public void run() {
                                 SpaceKeyTimer.this.timerManager.updateSolutionTiming(
-                                    new Timing(SpaceKeyTimer.this.start, new Date()));
+                                        new Timing(SpaceKeyTimer.this.start, new Date()));
                             }
                         }, 0, 5);
 
@@ -132,7 +123,7 @@ public class SpaceKeyTimer implements Timer {
 
                     case FINISHED:
                         SpaceKeyTimer.this.state = SpaceKeyTimer.this.inspectionEnabled ?
-                            State.READY_FOR_INSPECTION : State.READY;
+                                State.READY_FOR_INSPECTION : State.READY;
                         break;
                 }
 
@@ -160,5 +151,12 @@ public class SpaceKeyTimer implements Timer {
 
         this.frame.removeKeyListener(this.keyListener);
         this.timerManager.removeListener(this.timerListener);
+    }
+
+    private enum State {
+        READY_FOR_INSPECTION,
+        READY,
+        RUNNING,
+        FINISHED,
     }
 }

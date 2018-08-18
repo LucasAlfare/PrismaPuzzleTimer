@@ -5,5 +5,6 @@ import com.puzzletimer.models.ScramblerInfo;
 
 public interface Scrambler {
     ScramblerInfo getScramblerInfo();
+
     Scramble getNextScramble();
 }

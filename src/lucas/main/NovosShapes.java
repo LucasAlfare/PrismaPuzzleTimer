@@ -181,7 +181,7 @@ public enum NovosShapes {
         this.indexes = indexes;
     }
 
-    public int randomIndex(){
+    public int randomIndex() {
         Random r = new Random();
         return indexes[r.nextInt(indexes.length)];
     }

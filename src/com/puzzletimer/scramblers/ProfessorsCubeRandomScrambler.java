@@ -1,10 +1,10 @@
 package com.puzzletimer.scramblers;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public class ProfessorsCubeRandomScrambler implements Scrambler {
     private ScramblerInfo scramblerInfo;
@@ -65,12 +65,12 @@ public class ProfessorsCubeRandomScrambler implements Scrambler {
         }
 
         String[][] moves = {
-            { "U", "U2", "U'" }, { "Uw", "Uw2", "Uw'" },
-            { "Dw", "Dw2", "Dw'" }, { "D", "D2", "D'" },
-            { "L", "L2", "L'" }, { "Lw", "Lw2", "Lw'" },
-            { "Rw", "Rw2", "Rw'" }, { "R", "R2", "R'" },
-            { "F", "F2", "F'" }, { "Fw", "Fw2", "Fw'" },
-            { "Bw", "Bw2", "Bw'" }, { "B", "B2", "B'" },
+                {"U", "U2", "U'"}, {"Uw", "Uw2", "Uw'"},
+                {"Dw", "Dw2", "Dw'"}, {"D", "D2", "D'"},
+                {"L", "L2", "L'"}, {"Lw", "Lw2", "Lw'"},
+                {"Rw", "Rw2", "Rw'"}, {"R", "R2", "R'"},
+                {"F", "F2", "F'"}, {"Fw", "Fw2", "Fw'"},
+                {"Bw", "Bw2", "Bw'"}, {"B", "B2", "B'"},
         };
 
         String[] sequence = new String[this.scrambleLength];
@@ -79,8 +79,8 @@ public class ProfessorsCubeRandomScrambler implements Scrambler {
         }
 
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            sequence);
+                getScramblerInfo().getScramblerId(),
+                sequence);
     }
 
     @Override

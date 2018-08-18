@@ -2,16 +2,15 @@
 
 package com.puzzletimer.timer;
 
+import com.puzzletimer.models.Timing;
+import com.puzzletimer.state.TimerManager;
+
+import javax.sound.sampled.TargetDataLine;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.TimerTask;
 import java.util.Map.Entry;
-
-import javax.sound.sampled.TargetDataLine;
-
-import com.puzzletimer.models.Timing;
-import com.puzzletimer.state.TimerManager;
+import java.util.TimerTask;
 
 interface StackmatTimerReaderListener {
     void dataReceived(byte[] data);
@@ -70,14 +69,14 @@ class StackmatTimerReader implements Runnable {
         }
 
         return " ACILRS".contains(String.valueOf((char) data[0])) &&
-               Character.isDigit(data[1]) &&
-               Character.isDigit(data[2]) &&
-               Character.isDigit(data[3]) &&
-               Character.isDigit(data[4]) &&
-               Character.isDigit(data[5]) &&
-               data[6] == sum + 64 &&
-               data[7] == '\n' &&
-               data[8] == '\r';
+                Character.isDigit(data[1]) &&
+                Character.isDigit(data[2]) &&
+                Character.isDigit(data[3]) &&
+                Character.isDigit(data[4]) &&
+                Character.isDigit(data[5]) &&
+                data[6] == sum + 64 &&
+                data[7] == '\n' &&
+                data[8] == '\r';
     }
 
     @Override
@@ -100,7 +99,8 @@ class StackmatTimerReader implements Runnable {
             boolean isSignalInverted = false;
 
             // find packet start
-            loop: for (offset = 0; offset + 0.119171 * this.sampleRate < buffer.length; offset++) {
+            loop:
+            for (offset = 0; offset + 0.119171 * this.sampleRate < buffer.length; offset++) {
                 for (int threshold = 0; threshold < 256; threshold++) {
                     byte[] data = readPacket(buffer, offset, (byte) (threshold - 127), false);
                     if (isValidPacket(data)) {
@@ -186,14 +186,6 @@ class StackmatTimerReader implements Runnable {
 }
 
 public class StackmatTimer implements StackmatTimerReaderListener, Timer {
-    private enum State {
-        NOT_READY,
-        RESET_FOR_INSPECTION,
-        RESET,
-        READY,
-        RUNNING,
-    }
-
     private StackmatTimerReader stackmatTimerReader;
     private TimerManager timerManager;
     private boolean inspectionEnabled;
@@ -201,7 +193,6 @@ public class StackmatTimer implements StackmatTimerReaderListener, Timer {
     private java.util.Timer repeater;
     private Date start;
     private State state;
-
     public StackmatTimer(TargetDataLine targetDataLine, TimerManager timerManager) {
         this.stackmatTimerReader = new StackmatTimerReader(targetDataLine);
         this.timerManager = timerManager;
@@ -255,7 +246,7 @@ public class StackmatTimer implements StackmatTimerReaderListener, Timer {
                 switch (StackmatTimer.this.state) {
                     case RUNNING:
                         StackmatTimer.this.timerManager.updateSolutionTiming(
-                            new Timing(StackmatTimer.this.start, new Date()));
+                                new Timing(StackmatTimer.this.start, new Date()));
                         break;
                 }
             }
@@ -307,7 +298,7 @@ public class StackmatTimer implements StackmatTimerReaderListener, Timer {
                     this.timerManager.resetTimer();
 
                     this.state = this.inspectionEnabled ?
-                        State.RESET_FOR_INSPECTION : State.RESET;
+                            State.RESET_FOR_INSPECTION : State.RESET;
                 }
                 break;
 
@@ -358,5 +349,13 @@ public class StackmatTimer implements StackmatTimerReaderListener, Timer {
                 }
                 break;
         }
+    }
+
+    private enum State {
+        NOT_READY,
+        RESET_FOR_INSPECTION,
+        RESET,
+        READY,
+        RUNNING,
     }
 }

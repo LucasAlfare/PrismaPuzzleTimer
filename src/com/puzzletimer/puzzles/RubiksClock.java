@@ -1,9 +1,5 @@
 package com.puzzletimer.puzzles;
 
-import java.awt.Color;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.puzzletimer.graphics.Face;
 import com.puzzletimer.graphics.Matrix44;
 import com.puzzletimer.graphics.Mesh;
@@ -11,6 +7,10 @@ import com.puzzletimer.graphics.Vector3;
 import com.puzzletimer.models.ColorScheme;
 import com.puzzletimer.models.PuzzleInfo;
 import com.puzzletimer.solvers.RubiksClockSolver;
+
+import java.awt.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RubiksClock implements Puzzle {
     @Override
@@ -109,7 +109,7 @@ public class RubiksClock implements Puzzle {
         }
 
         Face[] faces = {
-            new Face(vertices, color),
+                new Face(vertices, color),
         };
 
         return new Mesh(faces);
@@ -134,7 +134,7 @@ public class RubiksClock implements Puzzle {
         }
 
         Face[] faces = {
-            new Face(vertices, color),
+                new Face(vertices, color),
         };
 
         return new Mesh(faces);
@@ -145,15 +145,15 @@ public class RubiksClock implements Puzzle {
         RubiksClockSolver.State state = stateFromSequence(sequence);
 
         Mesh handBackground =
-            hand(0.04, 8, 0.001, 3, 0.16, colorScheme.getFaceColor("HAND-BACKGROUND").getColor()).transform(
-                Matrix44.translation(new Vector3(0, 0, -0.025)));
+                hand(0.04, 8, 0.001, 3, 0.16, colorScheme.getFaceColor("HAND-BACKGROUND").getColor()).transform(
+                        Matrix44.translation(new Vector3(0, 0, -0.025)));
 
         Mesh handForeground =
-            hand(0.025, 8, 0.001, 3, 0.11, colorScheme.getFaceColor("HAND-FOREGROUND").getColor()).transform(
-                Matrix44.translation(new Vector3(0, 0, -0.05)));
+                hand(0.025, 8, 0.001, 3, 0.11, colorScheme.getFaceColor("HAND-FOREGROUND").getColor()).transform(
+                        Matrix44.translation(new Vector3(0, 0, -0.05)));
 
         Mesh hands =
-            handBackground.union(handForeground);
+                handBackground.union(handForeground);
 
         // front
         Mesh front = new Mesh(new Face[0]);
@@ -161,11 +161,11 @@ public class RubiksClock implements Puzzle {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Matrix44 transformation =
-                    Matrix44.translation(new Vector3(0.5 * (j - 1), 0.5 * (1 - i), 0)).mul(
-                    Matrix44.rotationZ(Math.PI / 6 * state.clocks[3 * i + j]));
+                        Matrix44.translation(new Vector3(0.5 * (j - 1), 0.5 * (1 - i), 0)).mul(
+                                Matrix44.rotationZ(Math.PI / 6 * state.clocks[3 * i + j]));
 
                 front = front.union(
-                    circle(0.225, 32, colorScheme.getFaceColor("FRONT").getColor()).union(hands).transform(transformation));
+                        circle(0.225, 32, colorScheme.getFaceColor("FRONT").getColor()).union(hands).transform(transformation));
             }
         }
 
@@ -174,15 +174,15 @@ public class RubiksClock implements Puzzle {
                 boolean pinDown = state.pinsDown[2 * i + j];
 
                 Matrix44 transformation =
-                    Matrix44.translation(
-                        new Vector3(
-                            0.5 * (j - 0.5),
-                            0.5 * (0.5 - i),
-                            pinDown ? 0.0 : -0.1));
+                        Matrix44.translation(
+                                new Vector3(
+                                        0.5 * (j - 0.5),
+                                        0.5 * (0.5 - i),
+                                        pinDown ? 0.0 : -0.1));
 
                 Color pinColor = colorScheme.getFaceColor(pinDown ? "PIN-DOWN" : "PIN-UP").getColor();
                 front = front.union(
-                    circle(0.05, 16, pinColor).transform(transformation));
+                        circle(0.05, 16, pinColor).transform(transformation));
             }
         }
 
@@ -192,11 +192,11 @@ public class RubiksClock implements Puzzle {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Matrix44 transformation =
-                    Matrix44.translation(new Vector3(0.5 * (j - 1), 0.5 * (1 - i), 0)).mul(
-                    Matrix44.rotationZ(Math.PI / 6 * state.clocks[9 + 3 * i + j]));
+                        Matrix44.translation(new Vector3(0.5 * (j - 1), 0.5 * (1 - i), 0)).mul(
+                                Matrix44.rotationZ(Math.PI / 6 * state.clocks[9 + 3 * i + j]));
 
                 back = back.union(
-                    circle(0.225, 32, colorScheme.getFaceColor("BACK").getColor()).union(hands).transform(transformation));
+                        circle(0.225, 32, colorScheme.getFaceColor("BACK").getColor()).union(hands).transform(transformation));
             }
         }
 
@@ -205,21 +205,21 @@ public class RubiksClock implements Puzzle {
                 boolean pinDown = !state.pinsDown[2 * i + (1 - j)];
 
                 Matrix44 transformation =
-                    Matrix44.translation(
-                        new Vector3(
-                            0.5 * (j - 0.5),
-                            0.5 * (0.5 - i),
-                            pinDown ? 0.0 : -0.1));
+                        Matrix44.translation(
+                                new Vector3(
+                                        0.5 * (j - 0.5),
+                                        0.5 * (0.5 - i),
+                                        pinDown ? 0.0 : -0.1));
 
                 Color pinColor = colorScheme.getFaceColor(pinDown ? "PIN-DOWN" : "PIN-UP").getColor();
                 back = back.union(
-                    circle(0.05, 16, pinColor).transform(transformation));
+                        circle(0.05, 16, pinColor).transform(transformation));
             }
         }
 
         back = back.transform(Matrix44.rotationY(Math.PI));
 
         return front.transform(Matrix44.translation(new Vector3(0, 0, -0.1))).union(
-            back.transform(Matrix44.translation(new Vector3(0, 0, 0.1))));
+                back.transform(Matrix44.translation(new Vector3(0, 0, 0.1))));
     }
 }

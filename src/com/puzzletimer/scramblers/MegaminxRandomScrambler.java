@@ -1,8 +1,9 @@
 package com.puzzletimer.scramblers;
-import java.util.Random;
 
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
+
+import java.util.Random;
 
 
 public class MegaminxRandomScrambler implements Scrambler {
@@ -26,17 +27,17 @@ public class MegaminxRandomScrambler implements Scrambler {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 5; j++) {
                 sequence[11 * i + 2 * j] =
-                    this.random.nextInt(2) == 0 ? "R++" : "R--";
+                        this.random.nextInt(2) == 0 ? "R++" : "R--";
                 sequence[11 * i + 2 * j + 1] =
-                    this.random.nextInt(2) == 0 ? "D++" : "D--";
+                        this.random.nextInt(2) == 0 ? "D++" : "D--";
             }
 
             sequence[11 * i + 10] = sequence[11 * i + 9] == "D++" ? "U" : "U'";
         }
 
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            sequence);
+                getScramblerInfo().getScramblerId(),
+                sequence);
     }
 
     @Override

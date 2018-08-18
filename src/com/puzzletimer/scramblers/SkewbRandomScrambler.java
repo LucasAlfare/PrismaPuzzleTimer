@@ -1,10 +1,10 @@
 package com.puzzletimer.scramblers;
 
-import java.util.Random;
-
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
 import com.puzzletimer.solvers.SkewbSolver;
+
+import java.util.Random;
 
 public class SkewbRandomScrambler implements Scrambler {
     private ScramblerInfo scramblerInfo;
@@ -25,9 +25,9 @@ public class SkewbRandomScrambler implements Scrambler {
     @Override
     public Scramble getNextScramble() {
         return new Scramble(
-            getScramblerInfo().getScramblerId(),
-            this.solver.generate(
-                this.solver.getRandomState(this.random)));
+                getScramblerInfo().getScramblerId(),
+                this.solver.generate(
+                        this.solver.getRandomState(this.random)));
     }
 
     @Override

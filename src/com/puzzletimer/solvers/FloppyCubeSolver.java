@@ -5,47 +5,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class FloppyCubeSolver {
-    public static class State {
-        public byte[] cornersPermutation;
-        public byte[] edgesOrientation;
-
-        public State(byte[] cornersPermutation, byte[] edgesOrientation) {
-            this.cornersPermutation = cornersPermutation;
-            this.edgesOrientation = edgesOrientation;
-        }
-
-        public State multiply(State move) {
-            // corners
-            byte[] cornersPermutation = new byte[4];
-
-            for (int i = 0; i < 4; i++) {
-                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
-            }
-
-            // edges
-            byte[] edgesOrientation = new byte[4];
-
-            for (int i = 0; i < 4; i++) {
-                edgesOrientation[i] = (byte) ((this.edgesOrientation[i] + move.edgesOrientation[i]) % 2);
-            }
-
-            return new State(cornersPermutation, edgesOrientation);
-        }
-
-        public static HashMap<String, State> moves;
-
-        static {
-            moves = new HashMap<String, State>();
-            moves.put("U", new State(new byte[] { 1, 0, 2, 3 }, new byte[] { 1, 0, 0, 0 }));
-            moves.put("R", new State(new byte[] { 0, 2, 1, 3 }, new byte[] { 0, 1, 0, 0 }));
-            moves.put("D", new State(new byte[] { 0, 1, 3, 2 }, new byte[] { 0, 0, 1, 0 }));
-            moves.put("L", new State(new byte[] { 3, 1, 2, 0 }, new byte[] { 0, 0, 0, 1 }));
-        }
-    }
-
     private static int N_CORNERS_PERMUTATION = 24;
     private static int N_EDGES_ORIENTATION = 16;
-
     private static int distance[][];
 
     static {
@@ -67,16 +28,16 @@ public class FloppyCubeSolver {
                 for (int j = 0; j < N_EDGES_ORIENTATION; j++) {
                     if (distance[i][j] == depth) {
                         State state = new State(
-                            IndexMapping.indexToPermutation(i, 4),
-                            IndexMapping.indexToOrientation(j, 2, 4));
+                                IndexMapping.indexToPermutation(i, 4),
+                                IndexMapping.indexToOrientation(j, 2, 4));
 
-                        for (String move : new String[] { "U", "R", "D", "L" }) {
+                        for (String move : new String[]{"U", "R", "D", "L"}) {
                             State newState = state.multiply(State.moves.get(move));
 
                             int cornersPermutationIndex =
-                                IndexMapping.permutationToIndex(newState.cornersPermutation);
+                                    IndexMapping.permutationToIndex(newState.cornersPermutation);
                             int edgesOrientationIndex =
-                                IndexMapping.orientationToIndex(newState.edgesOrientation, 2);
+                                    IndexMapping.orientationToIndex(newState.edgesOrientation, 2);
 
                             if (distance[cornersPermutationIndex][edgesOrientationIndex] == -1) {
                                 distance[cornersPermutationIndex][edgesOrientationIndex] = depth + 1;
@@ -94,26 +55,26 @@ public class FloppyCubeSolver {
     public static String[] solve(State state) {
         ArrayList<String> sequence = new ArrayList<String>();
 
-        for (;;) {
+        for (; ; ) {
             int cornersPermutationIndex =
-                IndexMapping.permutationToIndex(state.cornersPermutation);
+                    IndexMapping.permutationToIndex(state.cornersPermutation);
             int edgesOrientationIndex =
-                IndexMapping.orientationToIndex(state.edgesOrientation, 2);
+                    IndexMapping.orientationToIndex(state.edgesOrientation, 2);
 
             if (distance[cornersPermutationIndex][edgesOrientationIndex] == 0) {
                 break;
             }
 
-            for (String move : new String[] { "U", "D", "L", "R" }) {
+            for (String move : new String[]{"U", "D", "L", "R"}) {
                 State nextState = state.multiply(State.moves.get(move));
 
                 int nextCornersPermutationIndex =
-                    IndexMapping.permutationToIndex(nextState.cornersPermutation);
+                        IndexMapping.permutationToIndex(nextState.cornersPermutation);
                 int nextEdgesOrientationIndex =
-                    IndexMapping.orientationToIndex(nextState.edgesOrientation, 2);
+                        IndexMapping.orientationToIndex(nextState.edgesOrientation, 2);
 
                 if (distance[nextCornersPermutationIndex][nextEdgesOrientationIndex] ==
-                    distance[cornersPermutationIndex][edgesOrientationIndex] - 1) {
+                        distance[cornersPermutationIndex][edgesOrientationIndex] - 1) {
                     sequence.add(move);
                     state = nextState;
                     break;
@@ -139,20 +100,58 @@ public class FloppyCubeSolver {
     }
 
     public static State getRandomState(Random random) {
-        for (;;) {
+        for (; ; ) {
             int cornersPermutationIndex =
-                random.nextInt(N_CORNERS_PERMUTATION);
+                    random.nextInt(N_CORNERS_PERMUTATION);
             int edgesOrientationIndex =
-                random.nextInt(N_EDGES_ORIENTATION);
+                    random.nextInt(N_EDGES_ORIENTATION);
 
             if (distance[cornersPermutationIndex][edgesOrientationIndex] >= 0) {
                 byte[] cornersPermutation =
-                    IndexMapping.indexToPermutation(cornersPermutationIndex, 4);
+                        IndexMapping.indexToPermutation(cornersPermutationIndex, 4);
                 byte[] edgesOrientation =
-                    IndexMapping.indexToOrientation(edgesOrientationIndex, 2, 4);
+                        IndexMapping.indexToOrientation(edgesOrientationIndex, 2, 4);
 
                 return new State(cornersPermutation, edgesOrientation);
             }
+        }
+    }
+
+    public static class State {
+        public static HashMap<String, State> moves;
+
+        static {
+            moves = new HashMap<String, State>();
+            moves.put("U", new State(new byte[]{1, 0, 2, 3}, new byte[]{1, 0, 0, 0}));
+            moves.put("R", new State(new byte[]{0, 2, 1, 3}, new byte[]{0, 1, 0, 0}));
+            moves.put("D", new State(new byte[]{0, 1, 3, 2}, new byte[]{0, 0, 1, 0}));
+            moves.put("L", new State(new byte[]{3, 1, 2, 0}, new byte[]{0, 0, 0, 1}));
+        }
+
+        public byte[] cornersPermutation;
+        public byte[] edgesOrientation;
+
+        public State(byte[] cornersPermutation, byte[] edgesOrientation) {
+            this.cornersPermutation = cornersPermutation;
+            this.edgesOrientation = edgesOrientation;
+        }
+
+        public State multiply(State move) {
+            // corners
+            byte[] cornersPermutation = new byte[4];
+
+            for (int i = 0; i < 4; i++) {
+                cornersPermutation[i] = this.cornersPermutation[move.cornersPermutation[i]];
+            }
+
+            // edges
+            byte[] edgesOrientation = new byte[4];
+
+            for (int i = 0; i < 4; i++) {
+                edgesOrientation[i] = (byte) ((this.edgesOrientation[i] + move.edgesOrientation[i]) % 2);
+            }
+
+            return new State(cornersPermutation, edgesOrientation);
         }
     }
 }
