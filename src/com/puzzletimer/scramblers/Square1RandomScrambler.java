@@ -2,9 +2,11 @@ package com.puzzletimer.scramblers;
 
 import java.util.Random;
 
+import com.puzzletimer.Main;
 import com.puzzletimer.models.Scramble;
 import com.puzzletimer.models.ScramblerInfo;
 import com.puzzletimer.solvers.Square1Solver;
+import lucas.main.CubeShapeIndex;
 import lucas.main.FullCube;
 import lucas.main.Search;
 
@@ -32,9 +34,18 @@ public class Square1RandomScrambler implements Scrambler {
             this.solver.generate(
                 this.solver.getRandomState(this.random)));
          */
+        CubeShapeIndex aleatorio = Main.shapes.isEmpty()
+                ? null
+                : Main.shapes.get(this.random.nextInt(Main.shapes.size()));
+
+        String[] arrSeq = new Search().solutionAsArray(
+                aleatorio == null
+                        ? FullCube.randomCube(this.random)
+                        : FullCube.randomCube(aleatorio));
+
         return new Scramble(
                 getScramblerInfo().getScramblerId(),
-                new Search().solutionAsArray(FullCube.randomCube(this.random)));
+                arrSeq);
     }
 
     @Override

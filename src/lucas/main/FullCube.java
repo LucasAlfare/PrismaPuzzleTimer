@@ -89,6 +89,29 @@ public class FullCube implements Comparable<FullCube> {
         return randomCube(r);
     }
 
+    @Deprecated
+    public static FullCube randomCube(NovosShapes algum) {
+        int shape = Shape.ShapeIdx[algum.randomIndex()];
+        FullCube f = new FullCube();
+        int corner = 0x01234567 << 1 | 0x11111111;
+        int edge = 0x01234567 << 1;
+        int n_corner = 8, n_edge = 8;
+        buildRandomCube(r, shape, f, corner, edge, n_corner, n_edge);
+        f.ml = r.nextInt(2);
+        return f;
+    }
+
+    public static FullCube randomCube(CubeShapeIndex algum) {
+        int shape = Shape.ShapeIdx[algum.randomIndex()];
+        FullCube f = new FullCube();
+        int corner = 0x01234567 << 1 | 0x11111111;
+        int edge = 0x01234567 << 1;
+        int n_corner = 8, n_edge = 8;
+        buildRandomCube(r, shape, f, corner, edge, n_corner, n_edge);
+        f.ml = r.nextInt(2);
+        return f;
+    }
+
     public static FullCube randomCube(Random r) {
         int shape = Shape.ShapeIdx[r.nextInt(3678)];
         FullCube f = new FullCube();

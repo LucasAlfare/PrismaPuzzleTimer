@@ -593,6 +593,7 @@ public class MainFrame extends JFrame {
     private SessionSummaryFrame sessionSummaryFrame;
     private CategoryManagerFrame categoryManagerDialog;
     private ColorSchemeFrame colorSchemeFrame;
+    private CubeshapeFrame cubeshapeFrame;
 
     private AudioFormat audioFormat;
     private Mixer.Info mixerInfo;
@@ -820,11 +821,16 @@ public class MainFrame extends JFrame {
                     if (builtInCategory.accelerator != '\0') {
                         menuItemCategory.setAccelerator(KeyStroke.getKeyStroke(builtInCategory.accelerator, menuShortcutKey));
                     }
+
                     menuItemCategory.setSelected(builtInCategory.category == currentCategory);
                     menuItemCategory.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             MainFrame.this.categoryManager.setCurrentCategory(builtInCategory.category);
+                            if (builtInCategory.category.getDescription().toLowerCase().equals("square-1")){
+                                System.out.println("cliquei square!!!");
+                                cubeshapeFrame.setVisible(!cubeshapeFrame.isVisible());
+                            }
                         }
                     });
                     MainFrame.this.menuCategory.add(menuItemCategory);
@@ -1269,5 +1275,10 @@ public class MainFrame extends JFrame {
             this.colorManager);
         this.colorSchemeFrame.setLocationRelativeTo(null);
         this.colorSchemeFrame.setIconImage(icon);
+
+        // assistente de cubeshape
+        this.cubeshapeFrame = new CubeshapeFrame();
+        this.cubeshapeFrame.setLocationRelativeTo(null);
+        this.cubeshapeFrame.setIconImage(icon);
     }
 }

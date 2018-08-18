@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import lucas.main.CubeShapeIndex;
 import org.h2.tools.RunScript;
 
 import com.puzzletimer.database.CategoryDAO;
@@ -72,6 +74,8 @@ public class Main {
     private ScrambleManager scrambleManager;
     private SolutionManager solutionManager;
     private SessionManager sessionManager;
+
+    public static ArrayList<CubeShapeIndex> shapes = new ArrayList<>();
 
     public Main() {
         // load database driver

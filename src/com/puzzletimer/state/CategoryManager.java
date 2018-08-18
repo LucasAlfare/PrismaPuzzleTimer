@@ -25,7 +25,7 @@ public class CategoryManager {
     }
 
     public Category[] getCategories() {
-        return this.categories.toArray(new Category[this.categories.size()]);
+        return this.categories.toArray(new Category[0]);
     }
 
     public void addCategory(Category category) {
